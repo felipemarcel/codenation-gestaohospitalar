@@ -16,8 +16,9 @@ public class ApplicationTest {
     @Autowired
     private HospitalController controller;
 
+    // char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
     @Test
-    public void contextLoads() throws Exception {
+    public void contextLoads() {
         assertThat(controller).isNotNull();
     }
 }
