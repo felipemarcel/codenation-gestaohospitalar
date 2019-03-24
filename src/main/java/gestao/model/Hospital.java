@@ -1,25 +1,30 @@
 package gestao.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
+import java.util.List;
+
+import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.GenerationType.SEQUENCE;
 
 @Entity
+@Table(name = "hospitais")
 public class Hospital {
 
     @Id
     @GeneratedValue(strategy = SEQUENCE)
     private Long id;
 
-    private String name;
+    private String nome;
 
-    private Integer bed;
+    private String endereco;
 
     private Double latitude;
 
     private Double longitude;
+
+    @OneToMany(mappedBy = "hospital", cascade = ALL, orphanRemoval = true)
+    private List<Estoque> estoque;
 
     public Long getId() {
         return id;
@@ -29,11 +34,11 @@ public class Hospital {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getNome() {
+        return nome;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNome(String name) {
+        this.nome = name;
     }
 }
