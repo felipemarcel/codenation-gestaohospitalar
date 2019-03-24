@@ -26,6 +26,9 @@ public class Hospital {
     @OneToMany(mappedBy = "hospital", cascade = ALL, orphanRemoval = true)
     private List<Estoque> estoque;
 
+    @OneToMany(mappedBy = "hospital", cascade = ALL, orphanRemoval = true)
+    private List<Internacao> internacao;
+
     public Long getId() {
         return id;
     }
@@ -40,5 +43,37 @@ public class Hospital {
 
     public void setNome(String name) {
         this.nome = name;
+    }
+
+    public String getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public List<Estoque> getEstoque() {
+        return estoque;
+    }
+
+    public void setEstoque(List<Estoque> estoque) {
+        this.estoque = estoque;
     }
 }
