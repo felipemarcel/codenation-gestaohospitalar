@@ -1,25 +1,33 @@
 package gestao.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
+import java.util.List;
+
+import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.GenerationType.SEQUENCE;
 
 @Entity
+@Table(name = "hospitais")
 public class Hospital {
 
     @Id
     @GeneratedValue(strategy = SEQUENCE)
     private Long id;
 
-    private String name;
+    private String nome;
 
-    private Integer bed;
+    private String endereco;
 
     private Double latitude;
 
     private Double longitude;
+
+    @OneToMany(mappedBy = "hospital", cascade = ALL, orphanRemoval = true)
+    private List<Estoque> estoque;
+
+    @OneToMany(mappedBy = "hospital", cascade = ALL, orphanRemoval = true)
+    private List<Internacao> internacao;
 
     public Long getId() {
         return id;
@@ -29,11 +37,43 @@ public class Hospital {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getNome() {
+        return nome;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNome(String name) {
+        this.nome = name;
+    }
+
+    public String getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public List<Estoque> getEstoque() {
+        return estoque;
+    }
+
+    public void setEstoque(List<Estoque> estoque) {
+        this.estoque = estoque;
     }
 }

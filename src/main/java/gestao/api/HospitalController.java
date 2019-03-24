@@ -1,6 +1,7 @@
 package gestao.api;
 
 import gestao.model.Hospital;
+import gestao.model.Paciente;
 import gestao.service.HospitalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -51,5 +52,17 @@ public class HospitalController {
     public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody Hospital hospital){
         service.update(id, hospital);
         return ok().build();
+    }
+
+    @GetMapping("/{id}/pacientes")
+    // TODO Listar todos os pacientes internados, ou seja, não trazer pacientes que tiveram alta
+    public ResponseEntity<List<Paciente>> listAllPatientAdmitted(@PathVariable("id") Long id) {
+        return null;
+    }
+
+    @GetMapping("/{id}/historico-de-admissoes")
+    // TODO Listar todos os pacientes que já foram internados, mesmo aqueles que já receberam alta
+    public ResponseEntity<List<Paciente>> listAllPatient(@PathVariable("id") Long id) {
+        return null;
     }
 }

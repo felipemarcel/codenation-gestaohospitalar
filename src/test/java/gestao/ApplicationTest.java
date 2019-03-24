@@ -1,6 +1,9 @@
 package gestao;
 
 import gestao.api.HospitalController;
+import gestao.api.PacienteController;
+import gestao.api.ProcedimentoController;
+import gestao.api.ProdutoController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +17,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ApplicationTest {
 
     @Autowired
-    private HospitalController controller;
+    private HospitalController hospitalController;
 
-    // char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+    @Autowired
+    private PacienteController pacienteController;
+
+    @Autowired
+    private ProcedimentoController procedimentoController;
+
+    @Autowired
+    private ProdutoController produtoController;
+
     @Test
     public void contextLoads() {
-        assertThat(controller).isNotNull();
+        assertThat(hospitalController).isNotNull();
+        assertThat(pacienteController).isNotNull();
+        assertThat(procedimentoController).isNotNull();
+        assertThat(produtoController).isNotNull();
     }
 }

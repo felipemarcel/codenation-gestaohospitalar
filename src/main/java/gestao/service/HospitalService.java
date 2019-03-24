@@ -31,7 +31,7 @@ public class HospitalService {
 
     public void update(Long id, Hospital hospital){
         repository.findById(id).ifPresent(recoveredHospital -> {
-            hospital.setName(hospital.getName());
+            hospital.setNome(hospital.getNome());
             repository.save(hospital);
         });
     }
