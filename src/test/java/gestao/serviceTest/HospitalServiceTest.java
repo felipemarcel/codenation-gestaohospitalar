@@ -3,10 +3,14 @@ package gestao.serviceTest;
 import gestao.model.Hospital;
 import gestao.repository.HospitalRepository;
 import org.assertj.core.api.Assertions;
+import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+import org.mockito.stubbing.Stubber;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -18,7 +22,9 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -28,6 +34,8 @@ import static org.hamcrest.Matchers.*;
 public class HospitalServiceTest {
 
     private Validator validator;
+    private Map<Long, Hospital> fakeRepository = new HashMap<>();
+    private Long idCount = 0L;
 
     @Autowired
     private HospitalService service;
@@ -50,6 +58,18 @@ public class HospitalServiceTest {
         this.validator = factory.getValidator();
     }
 
+    private Stubber getDoAnswerToSave() {
+        return Mockito.doAnswer((Answer) invocation -> {
+            Hospital hospital = (Hospital) invocation.getArguments()[0];
+            Set<ConstraintViolation<Hospital>> violations = validator.validate(hospital);
+            if (violations.isEmpty()) {
+                hospital.setId(++idCount);
+                return hospital;
+            }
+            return null;
+        });
+    }
+
     @Test
     public void contextLoads() {
         Assertions.assertThat(service).isNotNull();
@@ -58,7 +78,8 @@ public class HospitalServiceTest {
     @Test
     public void shouldSaveHospital() {
         Hospital hospital = this.buildValidHospital();
-        Hospital saved = this.trySaveHospital(hospital);
+        this.getDoAnswerToSave().when(this.repository).save(hospital);
+        Hospital saved = this.service.save(hospital);
         assertThat(saved.getId(), is(notNullValue()));
     }
 
@@ -66,7 +87,8 @@ public class HospitalServiceTest {
     public void shouldNotSaveHospitalWithoutName() {
         Hospital hospital = this.buildValidHospital();
         hospital.setNome(null);
-        Hospital saved = this.trySaveHospital(hospital);
+        this.getDoAnswerToSave().when(this.repository).save(hospital);
+        Hospital saved = this.service.save(hospital);
         assertThat(saved, is(nullValue()));
     }
 
@@ -74,7 +96,8 @@ public class HospitalServiceTest {
     public void shouldNotSaveHospitalWithoutEndereco() {
         Hospital hospital = this.buildValidHospital();
         hospital.setEndereco(null);
-        Hospital saved = this.trySaveHospital(hospital);
+        this.getDoAnswerToSave().when(this.repository).save(hospital);
+        Hospital saved = this.service.save(hospital);
         assertThat(saved, is(nullValue()));
     }
 
@@ -82,7 +105,8 @@ public class HospitalServiceTest {
     public void shouldNotSaveHospitalWithInvalidLatitude() {
         Hospital hospital = this.buildValidHospital();
         hospital.setLatitude(new BigDecimal("90.1"));
-        Hospital saved = this.trySaveHospital(hospital);
+        this.getDoAnswerToSave().when(this.repository).save(hospital);
+        Hospital saved = this.service.save(hospital);
         assertThat(saved, is(nullValue()));
     }
 
@@ -90,22 +114,9 @@ public class HospitalServiceTest {
     public void shouldNotSaveHospitalWithInvalidLongitude() {
         Hospital hospital = this.buildValidHospital();
         hospital.setLongitude(new BigDecimal("-190"));
-        Hospital saved = this.trySaveHospital(hospital);
+        this.getDoAnswerToSave().when(this.repository).save(hospital);
+        Hospital saved = this.service.save(hospital);
         assertThat(saved, is(nullValue()));
-    }
-
-    private Hospital trySaveHospital(Hospital hospital) {
-        Mockito.when(this.repository.save(hospital)).thenReturn(this.saveHospital(hospital));
-        return this.service.save(hospital);
-    }
-
-    private Hospital saveHospital(Hospital hospital) {
-        Set<ConstraintViolation<Hospital>> violations = this.validator.validate(hospital);
-        if (violations.isEmpty()) {
-            hospital.setId(1L);
-            return hospital;
-        }
-        return null;
     }
 
     @Test

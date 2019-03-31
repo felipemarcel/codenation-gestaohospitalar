@@ -21,18 +21,18 @@ public class Hospital {
     @GeneratedValue(strategy = SEQUENCE)
     private Long id;
 
-    @NotBlank
+    @NotBlank(message = "{hospital.nome.not.blank}")
     private String nome;
 
-    @NotBlank
+    @NotBlank(message = "{hospital.endereco.not.blank}")
     private String endereco;
 
-    @NotNull
-    @Range(min = -90, max = 90)
+    @NotNull(message = "{hospital.latitude.not.blank}")
+    @Range(min = -90, max = 90, message = "{hospital.latitude.invalid}")
     private BigDecimal latitude;
 
-    @NotNull
-    @Range(min = -180, max = 180)
+    @NotNull(message = "{hospital.longitude.not.blank}")
+    @Range(min = -180, max = 180, message = "{hospital.longitude.invalid}")
     private BigDecimal longitude;
 
     @OneToMany(mappedBy = "hospital", cascade = ALL, orphanRemoval = true)
