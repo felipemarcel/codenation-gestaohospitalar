@@ -1,7 +1,6 @@
 package gestao.apiTest;
 
-import gestao.api.HospitalController;
-import gestao.service.HospitalService;
+import gestao.serviceTest.HospitalService;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;

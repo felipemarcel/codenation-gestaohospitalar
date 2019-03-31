@@ -1,8 +1,8 @@
-package gestao.api;
+package gestao.apiTest;
 
 import gestao.model.Hospital;
 import gestao.model.Paciente;
-import gestao.service.HospitalService;
+import gestao.serviceTest.HospitalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
