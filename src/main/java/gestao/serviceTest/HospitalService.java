@@ -1,4 +1,4 @@
-package gestao.service;
+package gestao.serviceTest;
 
 import gestao.exception.HospitalNotFoundException;
 import gestao.model.Hospital;

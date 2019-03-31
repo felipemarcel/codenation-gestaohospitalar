@@ -1,7 +1,6 @@
 package gestao.apiTest;
 
-import gestao.api.ProdutoController;
-import gestao.service.ProdutoService;
+import gestao.serviceTest.ProdutoService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

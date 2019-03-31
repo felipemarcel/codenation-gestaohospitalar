@@ -1,7 +1,6 @@
 package gestao.apiTest;
 
-import gestao.api.ProcedimentoController;
-import gestao.service.ProcedimentoService;
+import gestao.serviceTest.ProcedimentoService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,6 @@
 package gestao.apiTest;
 
-import gestao.api.PacienteController;
-import gestao.service.PacienteService;
+import gestao.serviceTest.PacienteService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

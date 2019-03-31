@@ -1,7 +1,7 @@
-package gestao.api;
+package gestao.apiTest;
 
 import gestao.model.Procedimento;
-import gestao.service.ProcedimentoService;
+import gestao.serviceTest.ProcedimentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
