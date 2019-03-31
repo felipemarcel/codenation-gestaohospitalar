@@ -1,0 +1,1 @@
+web: java -jar target/gestao-hospitalar-1.0.war
