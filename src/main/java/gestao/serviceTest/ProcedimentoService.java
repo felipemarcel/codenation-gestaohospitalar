@@ -1,4 +1,4 @@
-package gestao.service;
+package gestao.serviceTest;
 
 import org.springframework.stereotype.Service;
 
