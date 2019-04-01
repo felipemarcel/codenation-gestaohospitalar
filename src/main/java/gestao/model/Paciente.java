@@ -87,4 +87,12 @@ public class Paciente {
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
+    
+    public void getInfo() {
+    	System.out.println("Nome: " + this.nomeCompleto);
+    	System.out.println("CPF: " + this.cpf);
+    	System.out.println("Data de Nascimento: " + this.dataNascimento);
+    	System.out.println("Sexo: " + sexo);
+    	System.out.println("Data de entrada: " + this.nomeCompleto);	
+    }
 }
