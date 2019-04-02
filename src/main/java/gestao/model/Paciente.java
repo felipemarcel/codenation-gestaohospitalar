@@ -3,6 +3,7 @@ package gestao.model;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
+import java.time.LocalDateTime;
 
 import static javax.persistence.CascadeType.ALL;
 
@@ -24,6 +25,7 @@ public class Paciente {
 
     // TODO Adicionar validação de cpf
     private String cpf;
+    
 
     private String endereco;
     private Double latitude;
@@ -31,6 +33,15 @@ public class Paciente {
 
     @OneToMany(mappedBy = "paciente", cascade = ALL, orphanRemoval = true)
     private List<Internacao> internacao;
+    
+    
+    public Paciente(String Nome, String cpf, LocalDate dataNascimento, Sexo sexo){
+    	this.nomeCompleto = Nome;
+    	this.cpf = cpf;
+    	this.dataNascimento = dataNascimento;
+    	this.sexo = sexo;
+    	
+    }
 
     public String getNomeCompleto() {
         return nomeCompleto;
@@ -93,6 +104,6 @@ public class Paciente {
     	System.out.println("CPF: " + this.cpf);
     	System.out.println("Data de Nascimento: " + this.dataNascimento);
     	System.out.println("Sexo: " + sexo);
-    	System.out.println("Data de entrada: " + this.nomeCompleto);	
+    	System.out.println("Data de entrada: " + this.internacao.get(internacao.size() - 1).getDataEntrada());	
     }
 }
