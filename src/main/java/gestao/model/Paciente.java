@@ -110,7 +110,12 @@ public class Paciente {
     	this.nomeCompleto = Nome;
     	this.cpf = cpf;
     	this.dataNascimento = dataNascimento;
-    	this.sexo = sexo;    	
+    	if (ValidaCPF.isCPF(cpf) == true) {
+    		this.cpf = cpf;
+    	}
+    	else {
+    		// Adicionar excessão
+    	}   	
     }
     
     @Override
