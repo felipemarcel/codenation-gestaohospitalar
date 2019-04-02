@@ -4,12 +4,14 @@ import javax.persistence.*;
 import java.util.List;
 
 import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.GenerationType.SEQUENCE;
 
 @Entity
 @Table(name = "produtos")
 public class Produto {
 
     @Id
+    @GeneratedValue(strategy = SEQUENCE)
     private Long id;
 
     private String nome;
