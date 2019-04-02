@@ -99,6 +99,13 @@ public class Paciente {
         this.longitude = longitude;
     }
     
+    public void updatePaciente(String Nome, String cpf, LocalDate dataNascimento, Sexo sexo){
+    	this.nomeCompleto = Nome;
+    	this.cpf = cpf;
+    	this.dataNascimento = dataNascimento;
+    	this.sexo = sexo;    	
+    }
+    
     public void getInfo() {
     	System.out.println("Nome: " + this.nomeCompleto);
     	System.out.println("CPF: " + this.cpf);
