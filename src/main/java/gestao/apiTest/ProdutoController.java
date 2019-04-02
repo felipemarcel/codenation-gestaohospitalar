@@ -6,7 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.net.URISyntaxException;
+
+import static org.springframework.http.ResponseEntity.created;
+import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping("/produtos")
@@ -15,15 +19,16 @@ public class ProdutoController {
     @Autowired
     private ProdutoService service;
 
+    @ResponseBody
     @PostMapping
-    //TODO Implementar metodo para salvar produto
     public ResponseEntity<?> save(@RequestBody Produto produto) throws URISyntaxException {
-        return null;
+    	Produto saved = service.save(produto);
+        return created(new URI(saved.getId().toString())).build();
     }
 
+    @ResponseBody
     @GetMapping("/{id}")
-    // TODO Implementar método para obter detalhes de um produto
     public ResponseEntity<Produto> findById(@PathVariable("id") Long id) {
-        return null;
+        return ok(service.findBy(id));
     }
 }

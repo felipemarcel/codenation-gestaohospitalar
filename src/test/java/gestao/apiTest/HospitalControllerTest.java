@@ -32,7 +32,7 @@ public class HospitalControllerTest {
     }
 
     @Test
-    public void shouldReturnAllHospital() throws Exception{
+    public void shouldReturnAllHospital() throws Exception {
         this.mockMvc.perform(get("/hospitais"))
                 .andDo(print())
                 .andExpect(status().isOk());

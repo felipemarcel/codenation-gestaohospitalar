@@ -1,6 +1,7 @@
 package gestao.serviceTest;
 
 import gestao.repository.ProdutoRepository;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,5 +33,10 @@ public class ProdutoServiceTest {
     @Test
     public void contextLoads() {
         assertThat(service).isNotNull();
+    }
+    
+    @Test
+    @Ignore
+    public void shouldReturnProduct() {
     }
 }

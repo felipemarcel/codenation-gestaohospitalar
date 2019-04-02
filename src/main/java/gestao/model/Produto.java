@@ -45,4 +45,13 @@ public class Produto {
     public void setEstoque(List<Estoque> estoque) {
         this.estoque = estoque;
     }
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+    
 }
