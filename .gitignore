@@ -25,3 +25,20 @@ target/
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+# IDE files
+.gitignore
+.classpath
+.project
+.settings/org.eclipse.core.resources.prefs
+.settings/org.eclipse.jdt.core.prefs
+.travis.yml
+bin/.gitignore
+bin/.project
+bin/.settings/org.eclipse.core.resources.prefs
+bin/.travis.yml
+bin/LICENSE
+bin/README.md
+bin/pom.xml
+bin/result.json
+bin/src/main/resources/application.properties

@@ -37,9 +37,16 @@ public class Paciente {
     
     public Paciente(String Nome, String cpf, LocalDate dataNascimento, Sexo sexo){
     	this.nomeCompleto = Nome;
-    	this.cpf = cpf;
     	this.dataNascimento = dataNascimento;
     	this.sexo = sexo;
+    	
+    	if (ValidaCPF.isCPF(cpf) == true) {
+    		this.cpf = cpf;
+    	}
+    	else {
+    		// Adicionar excessão
+    	}
+    	    
     	
     }
 
@@ -106,11 +113,17 @@ public class Paciente {
     	this.sexo = sexo;    	
     }
     
+    @Override
+    public String toString() {
+        return "Nome: " + this.nomeCompleto + "\n" +
+        		"CPF: " + this.cpf +  "\n" +
+        		"Data de Nascimento: " + this.dataNascimento +  "\n" +
+        		"Sexo: " + sexo +  "\n" +
+        		"Data de entrada: " + this.internacao.get(internacao.size() - 1).getDataEntrada();
+        		
+    }
+    
     public void getInfo() {
-    	System.out.println("Nome: " + this.nomeCompleto);
-    	System.out.println("CPF: " + this.cpf);
-    	System.out.println("Data de Nascimento: " + this.dataNascimento);
-    	System.out.println("Sexo: " + sexo);
-    	System.out.println("Data de entrada: " + this.internacao.get(internacao.size() - 1).getDataEntrada());	
+    	System.out.println(this);	
     }
 }
