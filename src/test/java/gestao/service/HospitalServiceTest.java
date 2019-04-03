@@ -1,14 +1,12 @@
-package gestao.serviceTest;
+package gestao.service;
 
 import gestao.model.Hospital;
 import gestao.repository.HospitalRepository;
 import org.assertj.core.api.Assertions;
-import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.Stubber;
 import org.springframework.beans.factory.annotation.Autowired;
