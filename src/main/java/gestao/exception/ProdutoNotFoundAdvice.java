@@ -12,7 +12,7 @@ public class ProdutoNotFoundAdvice {
 	
 	@ResponseBody
     @ResponseStatus(NOT_FOUND)
-    @ExceptionHandler(HospitalNotFoundException.class)
+    @ExceptionHandler(ProdutoNotFoundException.class)
     String produtoNotFoundHandler(ProdutoNotFoundException ex){
         return ex.getMessage();
     }
