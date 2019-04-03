@@ -3,6 +3,7 @@ package gestao.serviceTest;
 import gestao.exception.HospitalNotFoundException;
 import gestao.model.Hospital;
 import gestao.repository.HospitalRepository;
+import gestao.service.EstoqueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,9 @@ public class HospitalService {
 
     @Autowired
     private HospitalRepository repository;
+    
+    @Autowired
+    private EstoqueService estoqueService;
 
     public List<Hospital> listAll(){
         return stream(repository.findAll().spliterator(), true).collect(toList());
@@ -38,5 +42,9 @@ public class HospitalService {
 
     public void remove(Long id) {
         repository.deleteById(id);
+    }
+    
+    public Estoque getEstoqueBy(Long id) {
+    	return estoqueService.findBy(id);
     }
 }

@@ -65,4 +65,14 @@ public class HospitalController {
     public ResponseEntity<List<Paciente>> listAllPatient(@PathVariable("id") Long id) {
         return null;
     }
+    
+    @GetMapping("/{id}/estoque")
+    public ResponseEntity<Estoque> listEstoque(@PathVariable("id") Long id){
+    	return service.getEstoqueBy(id);
+    }
+    
+    @GetMapping("/{id}/estoque/{produto}")
+    public ResponseEntity<List<Estoque>> listEstoque(@PathVariable("id") Long id, @PathVariable("produto") Long productId){
+    	return service.getProdutoFromEstoque(id, productId);
+    }
 }
