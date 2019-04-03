@@ -1,6 +1,6 @@
-package gestao.serviceTest;
+package gestao.service;
 
-import gestao.repository.ProdutoRepository;
+import gestao.repository.ProcedimentoRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,20 +12,20 @@ import org.springframework.test.context.junit4.SpringRunner;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
-public class ProdutoServiceTest {
+public class ProcedimentoServiceTest {
 
     @Autowired
-    private ProdutoService service;
+    private ProcedimentoService service;
 
     @MockBean
-    private ProdutoRepository repository;
+    private ProcedimentoRepository repository;
 
     @TestConfiguration
-    static class ProductServiceTestConfiguration {
+    static class ProcedimentoServiceTestConfiguration {
 
         @Bean
-        public ProdutoService produtoService() {
-            return new ProdutoService();
+        public ProcedimentoService procedimentoService() {
+            return new ProcedimentoService();
         }
     }
 
