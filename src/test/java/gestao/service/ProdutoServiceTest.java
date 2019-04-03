@@ -1,4 +1,4 @@
-package gestao.serviceTest;
+package gestao.service;
 
 import gestao.repository.ProdutoRepository;
 import org.junit.Ignore;

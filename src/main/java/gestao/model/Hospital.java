@@ -1,8 +1,14 @@
 package gestao.model;
 
-import javax.persistence.*;
+import org.hibernate.validator.constraints.Range;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.GenerationType.SEQUENCE;
@@ -15,13 +21,19 @@ public class Hospital {
     @GeneratedValue(strategy = SEQUENCE)
     private Long id;
 
+    @NotBlank(message = "{hospital.nome.not.blank}")
     private String nome;
 
+    @NotBlank(message = "{hospital.endereco.not.blank}")
     private String endereco;
 
-    private Double latitude;
+    @NotNull(message = "{hospital.latitude.not.blank}")
+    @Range(min = -90, max = 90, message = "{hospital.latitude.invalid}")
+    private BigDecimal latitude;
 
-    private Double longitude;
+    @NotNull(message = "{hospital.longitude.not.blank}")
+    @Range(min = -180, max = 180, message = "{hospital.longitude.invalid}")
+    private BigDecimal longitude;
 
     @OneToMany(mappedBy = "hospital", cascade = ALL, orphanRemoval = true)
     private List<Estoque> estoque;
@@ -53,19 +65,19 @@ public class Hospital {
         this.endereco = endereco;
     }
 
-    public Double getLatitude() {
+    public BigDecimal getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(Double latitude) {
+    public void setLatitude(BigDecimal latitude) {
         this.latitude = latitude;
     }
 
-    public Double getLongitude() {
+    public BigDecimal getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(Double longitude) {
+    public void setLongitude(BigDecimal longitude) {
         this.longitude = longitude;
     }
 
@@ -75,5 +87,23 @@ public class Hospital {
 
     public void setEstoque(List<Estoque> estoque) {
         this.estoque = estoque;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || this.getClass() != o.getClass()) return false;
+        Hospital hospital = (Hospital) o;
+        return Objects.equals(getId(), hospital.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.getId());
+    }
+
+    @Override
+    public String toString() {
+        return this.getNome();
     }
 }
