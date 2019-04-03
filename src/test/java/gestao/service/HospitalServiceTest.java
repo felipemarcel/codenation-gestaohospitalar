@@ -1,4 +1,4 @@
-package gestao.serviceTest;
+package gestao.service;
 
 import gestao.model.Hospital;
 import gestao.repository.HospitalRepository;
