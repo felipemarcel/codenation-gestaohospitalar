@@ -176,6 +176,18 @@ public class HospitalServiceTest {
         this.service.update(900L, hospital);
     }
 
+    @Test(expected = HospitalNotFoundException.class)
+    public void shouldThrowsHospitalNotFoundExceptionWhenNotExists() {
+        Hospital hospital = this.service.findBy(999L);
+    }
+
+    @Test
+    public void shouldReturnHospitalWhenExists() {
+        Hospital hospital = this.buildValidHospital();
+        hospital = this.service.save(hospital);
+        assertThat(this.service.findBy(hospital.getId()).getId(), is(hospital.getId()));
+    }
+
     private Hospital buildValidHospital() {
         Hospital hospital = new Hospital();
         hospital.setNome("Hospital de Teste");
