@@ -39,6 +39,11 @@ public class Produto {
      */
     private FatorRH fatorrh;
 
+    /**
+     * Quantidade dos produtos
+     */
+    private Long quantidade;
+
     @OneToMany(mappedBy = "produto", cascade = ALL, orphanRemoval = true)
     private List<Estoque> estoque;
 
@@ -109,12 +114,21 @@ public class Produto {
         this.fatorrh = fatorrh;
     }
 
-    public Produto(String nome, String descricao, Tipo tipo, Sangue sangue, FatorRH fatorrh, List<Estoque> estoque, List<Tratamento> tratamento) {
+    public Long getQuantidade() {
+        return quantidade;
+    }
+
+    public void setQuantidade(Long quantidade) {
+        this.quantidade = quantidade;
+    }
+
+    public Produto(String nome, String descricao, Tipo tipo, Sangue sangue, FatorRH fatorrh, Long quantidade, List<Estoque> estoque, List<Tratamento> tratamento) {
         this.nome = nome;
         this.descricao = descricao;
         this.tipo = tipo;
         this.sangue = sangue;
         this.fatorrh = fatorrh;
+        this.quantidade = quantidade;
         this.estoque = estoque;
         this.tratamento = tratamento;
     }
