@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.StreamSupport.stream;
@@ -30,10 +31,18 @@ public class HospitalService {
     }
 
     public void update(Long id, Hospital hospital){
-        repository.findById(id).ifPresent(recoveredHospital -> {
-            hospital.setNome(hospital.getNome());
-            repository.save(hospital);
-        });
+        Optional<Hospital> optionalHospital = repository.findById(id);
+        if (optionalHospital != null && optionalHospital.isPresent()) {
+            Hospital savedHospital = optionalHospital.get();
+            savedHospital.setNome(hospital.getNome());
+            savedHospital.setLongitude(hospital.getLongitude());
+            savedHospital.setLatitude(hospital.getLatitude());
+            savedHospital.setEndereco(hospital.getEndereco());
+
+            this.repository.save(savedHospital);
+        } else {
+            throw new HospitalNotFoundException(id);
+        }
     }
 
     public void remove(Long id) {
