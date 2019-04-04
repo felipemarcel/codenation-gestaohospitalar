@@ -9,9 +9,13 @@ public enum Tipo {
     /**
      * Produto é Remedio
      */
-    REMEDIO,
+    REMEDIO("REMEDIO"),
     /**
      * Produto é Bolsa de Sangue
      */
-    SANGUE
+    SANGUE("SANGUE");
+    public String value;
+    Tipo(String value){
+        this.value = value;
+    }
 }
