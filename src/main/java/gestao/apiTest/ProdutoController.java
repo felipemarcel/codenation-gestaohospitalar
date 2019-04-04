@@ -40,6 +40,10 @@ public class ProdutoController {
         return ok(service.findBy(id));
     }
 
+    /**
+     * Lista todos os produtos
+     * @return Lista dos produtos
+     */
     @ResponseBody
     @GetMapping
     public ResponseEntity<List<Produto>> listAll() {
