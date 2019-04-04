@@ -5,6 +5,7 @@ import gestao.tipo.Sangue;
 import gestao.tipo.Tipo;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class Produto {
     @GeneratedValue(strategy = SEQUENCE)
     private Long id;
 
+    @NotBlank(message = "{produto.nome.not.blank}")
     private String nome;
 
     private String descricao;
@@ -121,6 +123,11 @@ public class Produto {
 
     public void setEntradadoProduto(LocalDate entradadoProduto) {
         this.entradadoProduto = entradadoProduto;
+    }
+
+    public Produto(String nome, String descricao) {
+        this.nome = nome;
+        this.descricao = descricao;
     }
 
     public Produto(String nome, String descricao, Tipo tipo, LocalDate entradadoProduto, List<Estoque> estoque, List<Tratamento> tratamento) {
