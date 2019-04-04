@@ -1,6 +1,7 @@
 package gestao.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 import static javax.persistence.CascadeType.ALL;
@@ -14,6 +15,7 @@ public class Produto {
     @GeneratedValue(strategy = SEQUENCE)
     private Long id;
 
+    @NotBlank(message = "{produto.nome.not.blank}")
     private String nome;
 
     private String descricao;
@@ -48,12 +50,17 @@ public class Produto {
         this.estoque = estoque;
     }
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-    
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+
+    public Produto(String nome, String descricao) {
+        this.nome = nome;
+        this.descricao = descricao;
+    }
 }

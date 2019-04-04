@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import javax.validation.Valid;
 
 import static org.springframework.http.ResponseEntity.created;
 import static org.springframework.http.ResponseEntity.ok;
@@ -22,7 +21,8 @@ public class ProdutoController {
 
     @ResponseBody
     @PostMapping
-    public ResponseEntity<?> save(@Valid @RequestBody Produto produto) throws URISyntaxException {
+    //TODO adicionar anotação @valid em produto
+    public ResponseEntity<?> save(@RequestBody Produto produto) throws URISyntaxException {
     	Produto saved = service.save(produto);
         return created(new URI(saved.getId().toString())).build();
     }
