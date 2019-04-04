@@ -11,17 +11,22 @@ public enum Sangue {
     /**
      * Sangue tipo A
      */
-    A,
+    A("A"),
     /**
      * Sangue tipo B
      */
-    B,
+    B("B"),
     /**
      * Sangue tipo O
      */
-    O,
+    O("C"),
     /**
      * Sangue tipo AB
      */
-    AB
+    AB("AB");
+
+    public String value;
+    Sangue(String value){
+        this.value = value;
+    }
 }

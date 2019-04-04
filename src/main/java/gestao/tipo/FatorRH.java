@@ -9,9 +9,14 @@ public enum FatorRH {
     /**
      * Fator RH Positivo
      */
-    POSITIVO,
+    POSITIVO("POSITIVO"),
     /**
      * Fator RH Negativo
      */
-    NEGATIVO
+    NEGATIVO("NEGATIVO");
+    public String value;
+    FatorRH(String value){
+        this.value = value;
+    }
+
 }
