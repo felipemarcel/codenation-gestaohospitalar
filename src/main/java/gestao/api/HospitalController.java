@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -29,7 +30,7 @@ public class HospitalController {
 
     @ResponseBody
     @PostMapping
-    public ResponseEntity<?> save(@RequestBody Hospital hospital) throws URISyntaxException {
+    public ResponseEntity<?> save(@Valid @RequestBody Hospital hospital) throws URISyntaxException {
         Hospital saved = service.save(hospital);
         return created(new URI(saved.getId().toString())).build();
     }
@@ -49,7 +50,7 @@ public class HospitalController {
 
     @ResponseBody
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody Hospital hospital){
+    public ResponseEntity<?> update(@PathVariable("id") Long id, @Valid @RequestBody Hospital hospital){
         service.update(id, hospital);
         return ok().build();
     }
