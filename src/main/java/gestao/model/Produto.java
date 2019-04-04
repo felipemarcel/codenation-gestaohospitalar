@@ -2,6 +2,7 @@ package gestao.model;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 import static javax.persistence.CascadeType.ALL;
 
@@ -16,8 +17,8 @@ public class Produto {
 
     private String descricao;
 
-    @OneToMany(mappedBy = "produto", cascade = ALL, orphanRemoval = true)
-    private List<Estoque> estoque;
+    @ManyToMany(mappedBy = "produtos")
+    private Set<Estoque> estoques;
 
     @OneToMany(mappedBy = "produto", cascade = ALL, orphanRemoval = true)
     private List<Tratamento> tratamento;
@@ -38,11 +39,11 @@ public class Produto {
         this.descricao = descricao;
     }
 
-    public List<Estoque> getEstoque() {
-        return estoque;
+    public Set<Estoque> getEstoques() {
+        return estoques;
     }
 
-    public void setEstoque(List<Estoque> estoque) {
-        this.estoque = estoque;
+    public void setEstoque(Set<Estoque> estoque) {
+        this.estoques = estoque;
     }
 }

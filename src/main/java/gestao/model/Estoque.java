@@ -2,6 +2,9 @@ package gestao.model;
 
 import javax.persistence.*;
 
+import java.util.Set;
+
+import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.GenerationType.SEQUENCE;
 
 @Entity
@@ -12,9 +15,11 @@ public class Estoque {
     @GeneratedValue(strategy = SEQUENCE)
     private Long id;
 
-    @ManyToOne
-    @MapsId("produto_id")
-    private Produto produto;
+    @ManyToMany(cascade = ALL)
+    @JoinTable(name = "estoque_produto",
+            joinColumns = @JoinColumn(name = "estoque_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "produto_id", referencedColumnName = "id"))
+    private Set<Produto> produtos;
 
     @ManyToOne
     @MapsId("hospital_id")
@@ -31,12 +36,12 @@ public class Estoque {
         this.id = id;
     }
 
-    public Produto getProduto() {
-        return produto;
+    public Set<Produto> getProdutos() {
+        return produtos;
     }
 
-    public void setProduto(Produto produto) {
-        this.produto = produto;
+    public void setProdutos(Set<Produto> produtos) {
+        this.produtos = produtos;
     }
 
     public Hospital getHospital() {

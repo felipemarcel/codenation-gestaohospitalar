@@ -1,5 +1,6 @@
 package gestao.api;
 
+import gestao.model.Estoque;
 import gestao.model.Hospital;
 import gestao.model.Paciente;
 import gestao.service.HospitalService;
@@ -36,7 +37,7 @@ public class HospitalController {
 
     @ResponseBody
     @GetMapping("/{id}")
-    public ResponseEntity<Hospital> findById(@PathVariable("id") Long id){
+    public ResponseEntity<Hospital> findById(@PathVariable("id") Long id) {
         return ok(service.findBy(id));
     }
 
@@ -49,7 +50,7 @@ public class HospitalController {
 
     @ResponseBody
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody Hospital hospital){
+    public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody Hospital hospital) {
         service.update(id, hospital);
         return ok().build();
     }
@@ -65,14 +66,15 @@ public class HospitalController {
     public ResponseEntity<List<Paciente>> listAllPatient(@PathVariable("id") Long id) {
         return null;
     }
-    
+
+    @ResponseBody
     @GetMapping("/{id}/estoque")
-    public ResponseEntity<Estoque> listEstoque(@PathVariable("id") Long id){
-    	return service.getEstoqueBy(id);
+    public ResponseEntity<?> listEstoque(@PathVariable("id") Long id) {
+        return ok(service.getEstoqueBy(id));
     }
-    
+
     @GetMapping("/{id}/estoque/{produto}")
-    public ResponseEntity<List<Estoque>> listEstoque(@PathVariable("id") Long id, @PathVariable("produto") Long productId){
-    	return service.getProdutoFromEstoque(id, productId);
+    public ResponseEntity<List<Estoque>> listEstoque(@PathVariable("id") Long id, @PathVariable("produto") Long productId) {
+        return service.getProdutoFromEstoque(id, productId);
     }
 }
