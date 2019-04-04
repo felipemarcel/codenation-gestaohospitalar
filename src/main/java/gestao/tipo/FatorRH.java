@@ -1,5 +1,17 @@
 package gestao.tipo;
 
+/**
+ * Identifica o Fator RH
+ * <li>{@link #POSITIVO}</li>
+ * <li>{@link #NEGATIVO}</li>
+ */
 public enum FatorRH {
-    POSITIVO,NEGATIVO
+    /**
+     * Fator RH Positivo
+     */
+    POSITIVO,
+    /**
+     * Fator RH Negativo
+     */
+    NEGATIVO
 }
