@@ -5,6 +5,7 @@ import gestao.tipo.Sangue;
 import gestao.tipo.Tipo;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.List;
 
 import static javax.persistence.CascadeType.ALL;
@@ -43,6 +44,11 @@ public class Produto {
      * Quantidade dos produtos
      */
     private Long quantidade;
+
+    /**
+     * A data que foi cadastrado o produto
+     */
+    private LocalDate entradadoProduto;
 
     @OneToMany(mappedBy = "produto", cascade = ALL, orphanRemoval = true)
     private List<Estoque> estoque;
@@ -122,13 +128,22 @@ public class Produto {
         this.quantidade = quantidade;
     }
 
-    public Produto(String nome, String descricao, Tipo tipo, Sangue sangue, FatorRH fatorrh, Long quantidade, List<Estoque> estoque, List<Tratamento> tratamento) {
+    public LocalDate getEntradadoProduto() {
+        return entradadoProduto;
+    }
+
+    public void setEntradadoProduto(LocalDate entradadoProduto) {
+        this.entradadoProduto = entradadoProduto;
+    }
+
+    public Produto(String nome, String descricao, Tipo tipo, Sangue sangue, FatorRH fatorrh, Long quantidade, LocalDate entradadoProduto, List<Estoque> estoque, List<Tratamento> tratamento) {
         this.nome = nome;
         this.descricao = descricao;
         this.tipo = tipo;
         this.sangue = sangue;
         this.fatorrh = fatorrh;
         this.quantidade = quantidade;
+        this.entradadoProduto = entradadoProduto;
         this.estoque = estoque;
         this.tratamento = tratamento;
     }
