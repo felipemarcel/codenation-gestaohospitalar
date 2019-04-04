@@ -69,6 +69,8 @@ public class HospitalControllerTest {
                 hospital.setId(++idCount);
                 fakeRepository.put(hospital.getId(), hospital);
                 return hospital;
+            } else {
+                throw new HospitalNotFoundException(id);
             }
             return null;
         });
