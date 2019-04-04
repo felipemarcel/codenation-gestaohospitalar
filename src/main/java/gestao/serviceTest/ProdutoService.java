@@ -7,6 +7,8 @@ import gestao.repository.ProdutoRepository;
 
 import gestao.model.Produto;
 
+import java.util.List;
+
 @Service
 public class ProdutoService {
 	
@@ -20,4 +22,17 @@ public class ProdutoService {
 	public Produto findBy(Long id) {
 		return repository.findById(id).orElseThrow(() -> new ProdutoNotFoundException(id)); 
 	}
+
+	public void remove(Long id) {
+		repository.deleteById(id);
+	}
+
+	public List<Produto> listAll() {
+		return repository.findAll();
+	}
+
+	public List<Produto>  pesquisar(String nome) {
+		return repository.pesquisarProdutos(nome);
+	}
+
 }

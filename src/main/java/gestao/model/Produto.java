@@ -55,5 +55,19 @@ public class Produto {
 	public void setId(Long id) {
 		this.id = id;
 	}
-    
+
+    public List<Tratamento> getTratamento() {
+        return tratamento;
+    }
+
+    public void setTratamento(List<Tratamento> tratamento) {
+        this.tratamento = tratamento;
+    }
+
+    public Produto(String nome, String descricao, List<Estoque> estoque, List<Tratamento> tratamento) {
+        this.nome = nome;
+        this.descricao = descricao;
+        this.estoque = estoque;
+        this.tratamento = tratamento;
+    }
 }

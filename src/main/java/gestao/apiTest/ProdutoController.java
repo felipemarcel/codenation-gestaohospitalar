@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 import javax.validation.Valid;
 
 import static org.springframework.http.ResponseEntity.created;
@@ -31,5 +32,16 @@ public class ProdutoController {
     @GetMapping("/{id}")
     public ResponseEntity<Produto> findById(@PathVariable("id") Long id) {
         return ok(service.findBy(id));
+    }
+
+    @ResponseBody
+    @GetMapping
+    public ResponseEntity<List<Produto>> listAll() {
+        return ok(service.listAll());
+    }
+
+    @GetMapping("/por-nome")
+    public ResponseEntity<List<Produto>> pesquiar(@PathVariable("nome") String nome) {
+        return ok(service.pesquisar(nome));
     }
 }
