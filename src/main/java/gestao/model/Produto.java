@@ -1,5 +1,9 @@
 package gestao.model;
 
+import gestao.tipo.FatorRH;
+import gestao.tipo.Sangue;
+import gestao.tipo.Tipo;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -17,6 +21,23 @@ public class Produto {
     private String nome;
 
     private String descricao;
+
+    /**
+     * Identifica se é um remedio ou sangue
+     */
+    private Tipo tipo;
+
+    /**
+     * Identifica o Tipo de Sangue.
+     * p.e.: A, B, O e AB
+     */
+    private Sangue sangue;
+
+    /**
+     * Identifica o Fator RH
+     * Positivo ou Negativo
+     */
+    private FatorRH fatorrh;
 
     @OneToMany(mappedBy = "produto", cascade = ALL, orphanRemoval = true)
     private List<Estoque> estoque;
@@ -64,10 +85,38 @@ public class Produto {
         this.tratamento = tratamento;
     }
 
-    public Produto(String nome, String descricao, List<Estoque> estoque, List<Tratamento> tratamento) {
+    public Tipo getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(Tipo tipo) {
+        this.tipo = tipo;
+    }
+
+    public Sangue getSangue() {
+        return sangue;
+    }
+
+    public void setSangue(Sangue sangue) {
+        this.sangue = sangue;
+    }
+
+    public FatorRH getFatorrh() {
+        return fatorrh;
+    }
+
+    public void setFatorrh(FatorRH fatorrh) {
+        this.fatorrh = fatorrh;
+    }
+
+    public Produto(String nome, String descricao, Tipo tipo, Sangue sangue, FatorRH fatorrh, List<Estoque> estoque, List<Tratamento> tratamento) {
         this.nome = nome;
         this.descricao = descricao;
+        this.tipo = tipo;
+        this.sangue = sangue;
+        this.fatorrh = fatorrh;
         this.estoque = estoque;
         this.tratamento = tratamento;
     }
+
 }
