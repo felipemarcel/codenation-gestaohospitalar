@@ -41,11 +41,6 @@ public class Produto {
     private FatorRH fatorrh;
 
     /**
-     * Quantidade dos produtos
-     */
-    private Long quantidade;
-
-    /**
      * A data que foi cadastrado o produto
      */
     private LocalDate entradadoProduto;
@@ -120,14 +115,6 @@ public class Produto {
         this.fatorrh = fatorrh;
     }
 
-    public Long getQuantidade() {
-        return quantidade;
-    }
-
-    public void setQuantidade(Long quantidade) {
-        this.quantidade = quantidade;
-    }
-
     public LocalDate getEntradadoProduto() {
         return entradadoProduto;
     }
@@ -136,16 +123,23 @@ public class Produto {
         this.entradadoProduto = entradadoProduto;
     }
 
+    public Produto(String nome, String descricao, Tipo tipo, LocalDate entradadoProduto, List<Estoque> estoque, List<Tratamento> tratamento) {
+        this.nome = nome;
+        this.descricao = descricao;
+        this.tipo = tipo;
+        this.entradadoProduto = entradadoProduto;
+        this.estoque = estoque;
+        this.tratamento = tratamento;
+    }
+
     public Produto(String nome, String descricao, Tipo tipo, Sangue sangue, FatorRH fatorrh, Long quantidade, LocalDate entradadoProduto, List<Estoque> estoque, List<Tratamento> tratamento) {
         this.nome = nome;
         this.descricao = descricao;
         this.tipo = tipo;
         this.sangue = sangue;
         this.fatorrh = fatorrh;
-        this.quantidade = quantidade;
         this.entradadoProduto = entradadoProduto;
         this.estoque = estoque;
         this.tratamento = tratamento;
     }
-
 }
