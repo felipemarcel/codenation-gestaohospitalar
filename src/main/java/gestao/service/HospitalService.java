@@ -27,7 +27,11 @@ public class HospitalService {
     }
 
     public Hospital findBy(Long id){
-        return repository.findById(id).orElseThrow(() -> new HospitalNotFoundException(id));
+        Optional<Hospital> optionalHospital = repository.findById(id);
+        if (optionalHospital == null || !optionalHospital.isPresent()) {
+            throw new HospitalNotFoundException(id);
+        }
+        return optionalHospital.get();
     }
 
     public void update(Long id, Hospital hospital){

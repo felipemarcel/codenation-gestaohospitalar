@@ -62,7 +62,7 @@ public class HospitalControllerTest {
     }
 
     private Stubber getDoAnswerToSave() {
-        return Mockito.doAnswer((Answer) invocation -> {
+        return Mockito.doAnswer(invocation -> {
             Hospital hospital = (Hospital) invocation.getArguments()[0];
             Set<ConstraintViolation<Hospital>> violations = validator.validate(hospital);
             if (violations.isEmpty()) {
@@ -75,7 +75,7 @@ public class HospitalControllerTest {
     }
 
     private Stubber getDoAnswerToUpdate() {
-        return Mockito.doAnswer((Answer) invocation -> {
+        return Mockito.doAnswer(invocation -> {
             Long id = (Long) invocation.getArguments()[0];
             Hospital hospital = (Hospital) invocation.getArguments()[1];
             if (this.fakeRepository.containsKey(id)) {
@@ -89,7 +89,7 @@ public class HospitalControllerTest {
     }
 
     private Stubber getDoAnswerToFindById() {
-        return Mockito.doAnswer((Answer) invocation -> {
+        return Mockito.doAnswer(invocation -> {
             Long id = (Long) invocation.getArguments()[0];
             if (this.fakeRepository.containsKey(id)) {
                 Hospital hospital = this.fakeRepository.get(id);
@@ -101,9 +101,7 @@ public class HospitalControllerTest {
     }
 
     private Stubber getDoAnswerToList() {
-        return Mockito.doAnswer((Answer) invocation -> {
-            return fakeRepository.values().stream().collect(Collectors.toList());
-        });
+        return Mockito.doAnswer(invocation -> fakeRepository.values().stream().collect(Collectors.toList()));
     }
 
     @Before
@@ -113,7 +111,7 @@ public class HospitalControllerTest {
         this.getDoAnswerToSave().when(this.service).save(Mockito.any(Hospital.class));
         this.getDoAnswerToList().when(this.service).listAll();
         this.getDoAnswerToUpdate().when(this.service).update(Mockito.anyLong(), Mockito.any(Hospital.class));
-        this.getDoAnswerToUpdate().when(this.service).findBy(Mockito.anyLong());
+        this.getDoAnswerToFindById().when(this.service).findBy(Mockito.anyLong());
     }
 
     @Test
@@ -124,6 +122,18 @@ public class HospitalControllerTest {
                 .content(this.objectMapper.writeValueAsString(hospital)))
                 .andDo(print())
                 .andExpect(status().isCreated());
+    }
+
+    @Test
+    public void shouldNotSaveInvalidHospital() throws Exception {
+        Hospital hospital = this.buildValidHospital();
+        hospital.setNome(null);
+        hospital.setEndereco(null);
+        this.mockMvc.perform(post("/hospitais")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(this.objectMapper.writeValueAsString(hospital)))
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
     }
 
     @Test
@@ -144,12 +154,10 @@ public class HospitalControllerTest {
     }
 
     @Test
-    @Ignore
-    // TODO Corrigir Teste de retornar exceção HospitalNotFoundException quando for passado um hopistal com id inexistente
     public void shouldNotReturnHospitalWithInnexistentId() throws Exception {
         this.mockMvc.perform(get("/hospitais/30000"))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().is4xxClientError());
     }
 
     private Hospital buildValidHospital() {
