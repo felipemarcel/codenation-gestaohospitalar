@@ -62,7 +62,7 @@ public class HospitalControllerTest {
     }
 
     private Stubber getDoAnswerToSave() {
-        return Mockito.doAnswer((Answer) invocation -> {
+        return Mockito.doAnswer(invocation -> {
             Hospital hospital = (Hospital) invocation.getArguments()[0];
             Set<ConstraintViolation<Hospital>> violations = validator.validate(hospital);
             if (violations.isEmpty()) {
@@ -75,7 +75,7 @@ public class HospitalControllerTest {
     }
 
     private Stubber getDoAnswerToUpdate() {
-        return Mockito.doAnswer((Answer) invocation -> {
+        return Mockito.doAnswer(invocation -> {
             Long id = (Long) invocation.getArguments()[0];
             Hospital hospital = (Hospital) invocation.getArguments()[1];
             if (this.fakeRepository.containsKey(id)) {
@@ -89,7 +89,7 @@ public class HospitalControllerTest {
     }
 
     private Stubber getDoAnswerToFindById() {
-        return Mockito.doAnswer((Answer) invocation -> {
+        return Mockito.doAnswer(invocation -> {
             Long id = (Long) invocation.getArguments()[0];
             if (this.fakeRepository.containsKey(id)) {
                 Hospital hospital = this.fakeRepository.get(id);
@@ -101,9 +101,7 @@ public class HospitalControllerTest {
     }
 
     private Stubber getDoAnswerToList() {
-        return Mockito.doAnswer((Answer) invocation -> {
-            return fakeRepository.values().stream().collect(Collectors.toList());
-        });
+        return Mockito.doAnswer(invocation -> fakeRepository.values().stream().collect(Collectors.toList()));
     }
 
     @Before

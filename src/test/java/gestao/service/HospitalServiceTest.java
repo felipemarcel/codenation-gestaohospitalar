@@ -59,7 +59,7 @@ public class HospitalServiceTest {
     }
 
     private Stubber getDoAnswerToSave() {
-        return Mockito.doAnswer((Answer) invocation -> {
+        return Mockito.doAnswer(invocation -> {
             Hospital hospital = (Hospital) invocation.getArguments()[0];
             Set<ConstraintViolation<Hospital>> violations = validator.validate(hospital);
             if (violations.isEmpty()) {
@@ -187,7 +187,7 @@ public class HospitalServiceTest {
         hospital = this.service.save(hospital);
         assertThat(this.service.findBy(hospital.getId()).getId(), is(hospital.getId()));
     }
-
+    
     private Hospital buildValidHospital() {
         Hospital hospital = new Hospital();
         hospital.setNome("Hospital de Teste");
