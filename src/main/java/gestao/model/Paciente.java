@@ -1,6 +1,14 @@
 package gestao.model;
 
+import org.hibernate.validator.constraints.Range;
+import org.hibernate.validator.constraints.br.CPF;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -11,26 +19,54 @@ import static javax.persistence.CascadeType.ALL;
 public class Paciente {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
+    @NotBlank(message = "{paciente.nome.not.blank}")
     @Column(name = "nome_completo")
     private String nomeCompleto;
 
+    @NotNull(message = "{paciente.data.nascimento.not.blank}")
+    @Past(message = "{paciente.data.nascimento.past}")
     @Column(name = "data_nascimento")
     private LocalDate dataNascimento;
 
+    @NotNull(message = "{paciente.sexo.not.blank}")
     @Enumerated(EnumType.STRING)
     private Sexo sexo;
 
-    // TODO Adicionar validação de cpf
+    @NotBlank(message = "{paciente.CPF.not.blank}")
+    @CPF(message = "{paciente.cpf.invalido}")
     private String cpf;
 
     private String endereco;
-    private Double latitude;
-    private Double longitude;
+
+    @NotNull(message = "{paciente.latitude.not.blank}")
+    @Range(min = -90, max = 90, message = "{paciente.latitude.invalid}")
+    private BigDecimal latitude;
+
+    @NotNull(message = "{paciente.longitude.not.blank}")
+    @Range(min = -180, max = 180, message = "{paciente.longitude.invalid}")
+    private BigDecimal longitude;
 
     @OneToMany(mappedBy = "paciente", cascade = ALL, orphanRemoval = true)
     private List<Internacao> internacao;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public List<Internacao> getInternacao() {
+        return internacao;
+    }
+
+    public void setInternacao(List<Internacao> internacao) {
+        this.internacao = internacao;
+    }
 
     public String getNomeCompleto() {
         return nomeCompleto;
@@ -61,7 +97,9 @@ public class Paciente {
     }
 
     public void setCpf(String cpf) {
-        this.cpf = cpf;
+        if (cpf != null) {
+            this.cpf = cpf.replaceAll("\\D", "");
+        }
     }
 
     public String getEndereco() {
@@ -72,19 +110,19 @@ public class Paciente {
         this.endereco = endereco;
     }
 
-    public Double getLatitude() {
+    public BigDecimal getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(Double latitude) {
+    public void setLatitude(BigDecimal latitude) {
         this.latitude = latitude;
     }
 
-    public Double getLongitude() {
+    public BigDecimal getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(Double longitude) {
+    public void setLongitude(BigDecimal longitude) {
         this.longitude = longitude;
     }
     
@@ -93,6 +131,5 @@ public class Paciente {
     	System.out.println("CPF: " + this.cpf);
     	System.out.println("Data de Nascimento: " + this.dataNascimento);
     	System.out.println("Sexo: " + sexo);
-    	System.out.println("Data de entrada: " + this.nomeCompleto);	
     }
 }
