@@ -6,6 +6,7 @@ package gestao.tipo;
  * <li>{@link #SANGUE}</li>
  */
 public enum Tipo {
+
     /**
      * Produto é Remedio
      */
