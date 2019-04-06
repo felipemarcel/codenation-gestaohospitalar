@@ -12,6 +12,7 @@ public class Leito {
     @GeneratedValue(strategy = SEQUENCE)
     private Long id;
 
+
     @Enumerated(EnumType.STRING)
     private TipoLeito tipoLeito;
 
