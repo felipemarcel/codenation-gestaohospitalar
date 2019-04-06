@@ -3,7 +3,8 @@ package gestao.model;
 public enum Sexo {
 
     M("Masculino"),
-    F("Feminino");
+    F("Feminino"),
+    O("Outro");
 
     public String value;
     Sexo(String value){
