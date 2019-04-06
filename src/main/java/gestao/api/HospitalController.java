@@ -1,8 +1,12 @@
 package gestao.api;
 
+import gestao.exception.CheckoutNotValidException;
 import gestao.model.Hospital;
+import gestao.model.Internacao;
 import gestao.model.Paciente;
 import gestao.service.HospitalService;
+import gestao.service.InternacaoService;
+import gestao.service.PacienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.springframework.http.ResponseEntity.created;
@@ -21,6 +26,12 @@ public class HospitalController {
 
     @Autowired
     private HospitalService service;
+
+    @Autowired
+    private InternacaoService internacaoService;
+
+    @Autowired
+    private PacienteService pacienteService;
 
     @ResponseBody
     @GetMapping
@@ -66,4 +77,26 @@ public class HospitalController {
     public ResponseEntity<List<Paciente>> listAllPatient(@PathVariable("id") Long id) {
         return null;
     }
+
+    @ResponseBody
+    @PostMapping("/{id}/pacientes/{paciente}/checkin")
+    public ResponseEntity<?> checkin(@PathVariable("id") Long id, @PathVariable("paciente") Long idPaciente) {
+        Paciente paciente = this.pacienteService.findById(idPaciente);
+        Hospital hospital = this.service.findBy(id);
+        Internacao internacao = new Internacao();
+        internacao.setHospital(hospital);
+        internacao.setPaciente(paciente);
+        internacao.setDataEntrada(LocalDateTime.now());
+        this.internacaoService.save(internacao);
+        return ok().build();
+    }
+
+    @ResponseBody
+    @PutMapping("/{id}/pacientes/{paciente}/checkout")
+    public ResponseEntity<?> checkout(@PathVariable("id") Long id, @PathVariable("paciente") Long idPaciente) {
+        this.internacaoService.checkout(idPaciente, id);
+        return ok().build();
+    }
+
+
 }
