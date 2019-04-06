@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.GenerationType.SEQUENCE;
@@ -150,5 +151,24 @@ public class Produto {
         this.tratamento = tratamento;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Produto produto = (Produto) o;
+        return id.equals(produto.id) &&
+                nome.equals(produto.nome) &&
+                descricao.equals(produto.descricao) &&
+                tipo == produto.tipo &&
+                sangue == produto.sangue &&
+                fatorrh == produto.fatorrh &&
+                Objects.equals(entradadoProduto, produto.entradadoProduto) &&
+                Objects.equals(estoque, produto.estoque) &&
+                Objects.equals(tratamento, produto.tratamento);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nome, descricao, tipo, sangue, fatorrh, entradadoProduto, estoque, tratamento);
+    }
 }
