@@ -8,12 +8,19 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @ControllerAdvice
-public class HospitalNotFoundAdvice {
+public class NotFoundAdvice {
 
     @ResponseBody
     @ResponseStatus(NOT_FOUND)
     @ExceptionHandler(HospitalNotFoundException.class)
     String hospitalNotFoundHandler(HospitalNotFoundException ex){
+        return ex.getMessage();
+    }
+
+    @ResponseBody
+    @ResponseStatus(NOT_FOUND)
+    @ExceptionHandler(PacienteNotFoundException.class)
+    String hospitalNotFoundHandler(PacienteNotFoundException ex){
         return ex.getMessage();
     }
 }
