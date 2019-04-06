@@ -1,7 +1,6 @@
-package gestao.serviceTest;
+package gestao.service;
 
-import gestao.repository.PacienteRepository;
-import org.assertj.core.api.Assertions;
+import gestao.repository.ProdutoRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,26 +9,28 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @RunWith(SpringRunner.class)
-public class PacienteServiceTest {
+public class ProdutoServiceTest {
 
     @Autowired
-    private PacienteService service;
+    private ProdutoService service;
 
     @MockBean
-    private PacienteRepository repository;
+    private ProdutoRepository repository;
 
     @TestConfiguration
-    static class PacienteServiceTestConfiguration {
+    static class ProductServiceTestConfiguration {
 
         @Bean
-        public PacienteService pacienteService() {
-            return new PacienteService();
+        public ProdutoService produtoService() {
+            return new ProdutoService();
         }
     }
 
     @Test
     public void contextLoads() {
-        Assertions.assertThat(service).isNotNull();
+        assertThat(service).isNotNull();
     }
 }

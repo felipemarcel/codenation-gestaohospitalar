@@ -1,4 +1,4 @@
-package gestao.serviceTest;
+package gestao.service;
 
 import gestao.exception.ProdutoNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
