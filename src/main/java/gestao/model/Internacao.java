@@ -1,6 +1,9 @@
 package gestao.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.PastOrPresent;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,17 +19,22 @@ public class Internacao {
     @GeneratedValue(strategy = SEQUENCE)
     private Long id;
 
+    @NotNull(message = "{internacao.paciente.not.null}")
     @ManyToOne
     @MapsId("paciente_id")
     private Paciente paciente;
 
+    @NotNull(message = "{internacao.hospital.not.null}")
     @ManyToOne
     @MapsId("hospital_id")
     private Hospital hospital;
 
+    @NotNull(message = "{internacao.data.entrada.not.null}")
+    @PastOrPresent(message = "{internacao.data.entrada.not.future}")
     @Column(name = "data_entrada")
     private LocalDateTime dataEntrada;
 
+    @PastOrPresent(message = "{internacao.data.saida.not.future}")
     @Column(name = "data_saida")
     private LocalDateTime dataSaida;
 
