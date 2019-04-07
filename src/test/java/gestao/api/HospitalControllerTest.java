@@ -4,10 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import gestao.exception.CheckinNotValidException;
 import gestao.exception.CheckoutNotValidException;
 import gestao.exception.HospitalNotFoundException;
-import gestao.model.Hospital;
-import gestao.model.Internacao;
-import gestao.model.Paciente;
-import gestao.model.Sexo;
+import gestao.model.*;
 import gestao.service.HospitalService;
 import gestao.service.InternacaoService;
 import gestao.service.PacienteService;
@@ -36,7 +33,6 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.assertj.core.api.Assertions.allOf;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -209,7 +205,7 @@ public class HospitalControllerTest {
     }
 
     @Test
-    public void shouldReturnAllHospital() throws Exception{
+    public void shouldReturnAllHospital() throws Exception {
         this.mockMvc.perform(get("/hospitais"))
                 .andDo(print())
                 .andExpect(status().isOk());
@@ -289,6 +285,11 @@ public class HospitalControllerTest {
         hospital.setEndereco("Av. Brasil, 902");
         hospital.setLatitude(new BigDecimal("10.058"));
         hospital.setLongitude(new BigDecimal("-52.12"));
+        Estoque estoque = new Estoque();
+        estoque.setId(1L);
+        Set<Estoque> estoques = new HashSet<>();
+        estoques.add(estoque);
+        hospital.setEstoques(estoques);
         return hospital;
     }
 
