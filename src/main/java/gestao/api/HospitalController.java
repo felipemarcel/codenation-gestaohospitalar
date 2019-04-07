@@ -48,7 +48,7 @@ public class HospitalController {
 
     @ResponseBody
     @GetMapping("/{id}")
-    public ResponseEntity<Hospital> findById(@PathVariable("id") Long id){
+    public ResponseEntity<Hospital> findById(@PathVariable("id") Long id) {
         return ok(service.findBy(id));
     }
 
@@ -61,7 +61,7 @@ public class HospitalController {
 
     @ResponseBody
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable("id") Long id, @Valid @RequestBody Hospital hospital){
+    public ResponseEntity<?> update(@PathVariable("id") Long id, @Valid @RequestBody Hospital hospital) {
         service.update(id, hospital);
         return ok().build();
     }
@@ -84,10 +84,10 @@ public class HospitalController {
         return ok(service.getEstoqueBy(id));
     }
 
-//    @GetMapping("/{id}/estoque/{produto}")
-//    public ResponseEntity<List<Estoque>> listEstoque(@PathVariable("id") Long id, @PathVariable("produto") Long idProduto) {
-//        return service.getProdutoFromEstoque(id, idProduto);
-//    }
+    @GetMapping("/{id}/estoque/{produto}")
+    public ResponseEntity<?> listEstoque(@PathVariable("id") Long id, @PathVariable("produto") Long idProduto) {
+        return ok(service.getProdutoFromEstoque(id, idProduto));
+    }
 
     @PostMapping("/{id}/pacientes/{paciente}/checkin")
     public ResponseEntity<?> checkin(@PathVariable("id") Long id, @PathVariable("paciente") Long idPaciente) {

@@ -1,6 +1,5 @@
 package gestao.service;
 
-import gestao.exception.EstoqueNotFoundException;
 import gestao.exception.HospitalNotFoundException;
 import gestao.model.Estoque;
 import gestao.model.Hospital;
@@ -58,10 +57,12 @@ public class HospitalService {
     }
 
     public Set<Estoque> getEstoqueBy(Long id) {
-        return repository.findById(id).orElseThrow(() -> new HospitalNotFoundException(id)).getEstoques();
+        return repository.findById(id)
+                .orElseThrow(() -> new HospitalNotFoundException(id))
+                .getEstoques();
     }
 
-    public Set<Produto> getProdutosFromEstoque(Long idHospital, Long idEstoque) {
+    public Produto getProdutoFromEstoque(Long idHospital, Long idProduto) {
         repository.findById(idHospital).orElseThrow(() -> new HospitalNotFoundException(idHospital)).getEstoques().stream();
         return null;
     }

@@ -1,6 +1,7 @@
 package gestao.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
@@ -9,11 +10,11 @@ import java.util.List;
 import java.util.Set;
 
 import static javax.persistence.CascadeType.ALL;
-import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.SEQUENCE;
 
 @Entity
 @Table(name = "produtos")
+@JsonIgnoreProperties(ignoreUnknown = true, value = {"hibernateLazyInitializer", "handler"})
 public class Produto {
 
     @Id
