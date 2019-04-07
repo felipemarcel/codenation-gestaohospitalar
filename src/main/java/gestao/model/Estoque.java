@@ -1,10 +1,12 @@
 package gestao.model;
 
-import javax.persistence.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import javax.persistence.*;
 import java.util.Set;
 
-import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.SEQUENCE;
 
 @Entity
@@ -15,18 +17,12 @@ public class Estoque {
     @GeneratedValue(strategy = SEQUENCE)
     private Long id;
 
-    @ManyToMany(cascade = ALL)
-    @JoinTable(name = "estoque_produto",
-            joinColumns = @JoinColumn(name = "estoque_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "produto_id", referencedColumnName = "id"))
-    private Set<Produto> produtos;
-
-    @ManyToOne
-    @MapsId("hospital_id")
-    private Hospital hospital;
-
     private Integer quantidade;
 
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "produto_id", referencedColumnName = "id")
+    @JsonManagedReference
+    private Produto produto;
 
     public Long getId() {
         return id;
@@ -34,22 +30,6 @@ public class Estoque {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Set<Produto> getProdutos() {
-        return produtos;
-    }
-
-    public void setProdutos(Set<Produto> produtos) {
-        this.produtos = produtos;
-    }
-
-    public Hospital getHospital() {
-        return hospital;
-    }
-
-    public void setHospital(Hospital hospital) {
-        this.hospital = hospital;
     }
 
     public Integer getQuantidade() {

@@ -7,8 +7,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.GenerationType.SEQUENCE;
@@ -35,11 +35,9 @@ public class Hospital {
     @Range(min = -180, max = 180, message = "{hospital.longitude.invalid}")
     private BigDecimal longitude;
 
-    @OneToMany(mappedBy = "hospital", cascade = ALL, orphanRemoval = true)
-    private List<Estoque> estoque;
-
-    @OneToMany(mappedBy = "hospital", cascade = ALL, orphanRemoval = true)
-    private List<Internacao> internacao;
+    @OneToMany(cascade = ALL, orphanRemoval = true)
+    @JoinColumn(name = "hospital_id", referencedColumnName = "id")
+    private Set<Estoque> estoques;
 
     public Long getId() {
         return id;
@@ -81,12 +79,12 @@ public class Hospital {
         this.longitude = longitude;
     }
 
-    public List<Estoque> getEstoque() {
-        return estoque;
+    public Set<Estoque> getEstoques() {
+        return estoques;
     }
 
-    public void setEstoque(List<Estoque> estoque) {
-        this.estoque = estoque;
+    public void setEstoques(Set<Estoque> estoques) {
+        this.estoques = estoques;
     }
 
     @Override
