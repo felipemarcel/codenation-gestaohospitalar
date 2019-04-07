@@ -85,7 +85,7 @@ public class HospitalController {
     }
 
     @GetMapping("/{id}/estoque/{produto}")
-    public ResponseEntity<?> listEstoque(@PathVariable("id") Long id, @PathVariable("produto") Long idProduto) {
+    public ResponseEntity<?> findProdutoFromEstoque(@PathVariable("id") Long id, @PathVariable("produto") Long idProduto) {
         return ok(service.getProdutoFromEstoque(id, idProduto));
     }
 
