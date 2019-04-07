@@ -74,6 +74,7 @@ public class PacienteController {
     @GetMapping("/{id}/hospitais-proximos")
     // TODO Listar todos os hospitais próximos do paciente
     public ResponseEntity<List<Hospital>> listAllNearby(@PathVariable("id") Long id) {
+
         return null;
     }
 }
