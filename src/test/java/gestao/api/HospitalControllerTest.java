@@ -4,13 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import gestao.exception.CheckinNotValidException;
 import gestao.exception.CheckoutNotValidException;
 import gestao.exception.HospitalNotFoundException;
-import gestao.model.Hospital;
-import gestao.model.Internacao;
-import gestao.model.Paciente;
-import gestao.model.Sexo;
+import gestao.model.*;
 import gestao.service.HospitalService;
 import gestao.service.InternacaoService;
 import gestao.service.PacienteService;
+import gestao.service.TratamentoService;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -58,6 +56,9 @@ public class HospitalControllerTest {
     @MockBean
     private InternacaoService internacaoService;
 
+    @MockBean
+    private TratamentoService tratamentoService;
+
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -68,7 +69,7 @@ public class HospitalControllerTest {
     private Map<Long, Internacao> fakeInternacaoRepository = new HashMap<>();
 
     private Long idInternacaoCount = 0L;
-
+    private Long idTratamentoCount = 0L;
     private Long idCount = 0L;
 
     @Test
@@ -102,6 +103,22 @@ public class HospitalControllerTest {
                 }
             } else {
                 throw new CheckinNotValidException();
+            }
+            return null;
+        });
+    }
+
+    private Stubber getDoAnswerToTratamentoSave() {
+        return Mockito.doAnswer(invocation -> {
+            Tratamento tratamento = (Tratamento) invocation.getArguments()[0];
+            Set<ConstraintViolation<Tratamento>> violations = validator.validate(tratamento);
+            if (violations.isEmpty()) {
+                Internacao internacao = fakeInternacaoRepository.get(tratamento.getInternacao().getId());
+                tratamento.setId(++idTratamentoCount);
+                if (internacao.getTratamento() == null) {
+                    internacao.setTratamento(new ArrayList<>());
+                }
+                internacao.getTratamento().add(tratamento);
             }
             return null;
         });
@@ -160,6 +177,18 @@ public class HospitalControllerTest {
         });
     }
 
+    private Stubber getDoAnswerToInternacaoById() {
+        return Mockito.doAnswer(invocation -> {
+            Long id = (Long) invocation.getArguments()[0];
+            if (this.fakeInternacaoRepository.containsKey(id)) {
+                Internacao internacao = this.fakeInternacaoRepository.get(id);
+                return internacao;
+            } else {
+                throw new CheckinNotValidException("O paciente não está internado.");
+            }
+        });
+    }
+
     private Stubber getDoAnswerToPacienteFindById() {
         // Será considerado que existe o paciente
         return Mockito.doAnswer(invocation -> {
@@ -184,6 +213,7 @@ public class HospitalControllerTest {
         this.getDoAnswerToPacienteFindById().when(this.pacienteService).findById(Mockito.anyLong());
         this.getDoAnswerToInternacaoSave().when(this.internacaoService).save(Mockito.any(Internacao.class));
         this.getDoAnswerToInternacaoCheckout().when(this.internacaoService).checkout(Mockito.anyLong(), Mockito.anyLong());
+        this.getDoAnswerToInternacaoById().when(this.internacaoService).findById(Mockito.anyLong());
     }
 
     @Test
@@ -281,6 +311,28 @@ public class HospitalControllerTest {
         this.mockMvc.perform(put("/hospitais/1/pacientes/1/checkout"))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void shouldAddTratamentos() throws Exception {
+        this.checkinPacienteId1();
+        Tratamento tratamentoA = new Tratamento();
+        tratamentoA.setData(LocalDateTime.now());
+        tratamentoA.setInternacao(fakeInternacaoRepository.get(1L));
+
+        Tratamento tratamentoB = new Tratamento();
+        tratamentoA.setData(LocalDateTime.now());
+        tratamentoA.setInternacao(fakeInternacaoRepository.get(1L));
+
+        List<Tratamento> tratamentos = new ArrayList<>();
+        tratamentos.add(tratamentoA);
+        tratamentos.add(tratamentoB);
+
+        this.mockMvc.perform(post("/hospitais/internacoes/1/tratamentos")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(this.objectMapper.writeValueAsString(tratamentos)))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 
     private Hospital buildValidHospital() {

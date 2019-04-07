@@ -1,6 +1,8 @@
 package gestao.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
 
 import java.time.LocalDateTime;
 
@@ -14,8 +16,11 @@ public class Tratamento {
     @GeneratedValue(strategy = SEQUENCE)
     private Long id;
 
+    @NotNull
+    @PastOrPresent
     private LocalDateTime data;
 
+    @NotNull
     @ManyToOne
     @MapsId("internacao_id")
     private Internacao internacao;
@@ -28,6 +33,13 @@ public class Tratamento {
     @MapsId("procedimento_id")
     private Procedimento procedimento;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public LocalDateTime getData() {
         return data;
