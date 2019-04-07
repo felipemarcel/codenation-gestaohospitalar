@@ -16,6 +16,14 @@ public class InternacaoService {
     @Autowired
     private InternacaoRepository repository;
 
+    public Internacao findById(Long id) {
+        Optional<Internacao> optional = this.repository.findById(id);
+        if (optional == null || !optional.isPresent()) {
+            throw new CheckinNotValidException("O paciente não está internado.");
+        }
+        return optional.get();
+    }
+
     public Internacao save(Internacao internacao) {
         if (this.findInternacaoAbertaByPaciente(internacao.getPaciente().getId()) != null) {
             throw new CheckinNotValidException();
@@ -37,6 +45,5 @@ public class InternacaoService {
     public Internacao findInternacaoAbertaByPaciente(Long idPaciente) {
         return this.repository.findOpenedInternacaoByPaciente(idPaciente);
     }
-
 
 }

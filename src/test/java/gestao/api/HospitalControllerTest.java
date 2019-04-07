@@ -8,13 +8,13 @@ import gestao.model.*;
 import gestao.service.HospitalService;
 import gestao.service.InternacaoService;
 import gestao.service.PacienteService;
+import gestao.service.TratamentoService;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.Stubber;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -54,6 +54,9 @@ public class HospitalControllerTest {
     @MockBean
     private InternacaoService internacaoService;
 
+    @MockBean
+    private TratamentoService tratamentoService;
+
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -64,7 +67,7 @@ public class HospitalControllerTest {
     private Map<Long, Internacao> fakeInternacaoRepository = new HashMap<>();
 
     private Long idInternacaoCount = 0L;
-
+    private Long idTratamentoCount = 0L;
     private Long idCount = 0L;
 
     @Test
@@ -103,8 +106,24 @@ public class HospitalControllerTest {
         });
     }
 
+    private Stubber getDoAnswerToTratamentoSave() {
+        return Mockito.doAnswer(invocation -> {
+            Tratamento tratamento = (Tratamento) invocation.getArguments()[0];
+            Set<ConstraintViolation<Tratamento>> violations = validator.validate(tratamento);
+            if (violations.isEmpty()) {
+                Internacao internacao = fakeInternacaoRepository.get(tratamento.getInternacao().getId());
+                tratamento.setId(++idTratamentoCount);
+                if (internacao.getTratamento() == null) {
+                    internacao.setTratamento(new ArrayList<>());
+                }
+                internacao.getTratamento().add(tratamento);
+            }
+            return null;
+        });
+    }
+
     private Internacao getInternacaoAberta(Long idPaciente) {
-        Optional<Internacao> optional = this.fakeInternacaoRepository.values().stream()
+        Optional<Internacao> optional = fakeInternacaoRepository.values().stream()
                 .filter(item -> (item.getPaciente().getId().equals(idPaciente)
                         && item.getDataSaida() == null))
                 .findAny();
@@ -134,9 +153,9 @@ public class HospitalControllerTest {
         return Mockito.doAnswer(invocation -> {
             Long id = (Long) invocation.getArguments()[0];
             Hospital hospital = (Hospital) invocation.getArguments()[1];
-            if (this.fakeRepository.containsKey(id)) {
+            if (fakeRepository.containsKey(id)) {
                 hospital.setId(id);
-                this.fakeRepository.put(id, hospital);
+                fakeRepository.put(id, hospital);
             } else {
                 throw new HospitalNotFoundException(id);
             }
@@ -147,8 +166,8 @@ public class HospitalControllerTest {
     private Stubber getDoAnswerToFindById() {
         return Mockito.doAnswer(invocation -> {
             Long id = (Long) invocation.getArguments()[0];
-            if (this.fakeRepository.containsKey(id)) {
-                Hospital hospital = this.fakeRepository.get(id);
+            if (fakeRepository.containsKey(id)) {
+                Hospital hospital = fakeRepository.get(id);
                 return hospital;
             } else {
                 throw new HospitalNotFoundException(id);
@@ -156,10 +175,22 @@ public class HospitalControllerTest {
         });
     }
 
+    private Stubber getDoAnswerToInternacaoById() {
+        return Mockito.doAnswer(invocation -> {
+            Long id = (Long) invocation.getArguments()[0];
+            if (fakeInternacaoRepository.containsKey(id)) {
+                Internacao internacao = fakeInternacaoRepository.get(id);
+                return internacao;
+            } else {
+                throw new CheckinNotValidException("O paciente não está internado.");
+            }
+        });
+    }
+
     private Stubber getDoAnswerToPacienteFindById() {
         // Será considerado que existe o paciente
         return Mockito.doAnswer(invocation -> {
-            Paciente paciente = this.buildValidPaciente();
+            Paciente paciente = buildValidPaciente();
             paciente.setId((Long) invocation.getArguments()[0]);
             return paciente;
         });
@@ -172,75 +203,76 @@ public class HospitalControllerTest {
     @Before
     public void setup() {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        this.validator = factory.getValidator();
-        this.getDoAnswerToSave().when(this.service).save(Mockito.any(Hospital.class));
-        this.getDoAnswerToList().when(this.service).listAll();
-        this.getDoAnswerToUpdate().when(this.service).update(Mockito.anyLong(), Mockito.any(Hospital.class));
-        this.getDoAnswerToFindById().when(this.service).findBy(Mockito.anyLong());
-        this.getDoAnswerToPacienteFindById().when(this.pacienteService).findById(Mockito.anyLong());
-        this.getDoAnswerToInternacaoSave().when(this.internacaoService).save(Mockito.any(Internacao.class));
-        this.getDoAnswerToInternacaoCheckout().when(this.internacaoService).checkout(Mockito.anyLong(), Mockito.anyLong());
+        validator = factory.getValidator();
+        getDoAnswerToSave().when(service).save(Mockito.any(Hospital.class));
+        getDoAnswerToList().when(service).listAll();
+        getDoAnswerToUpdate().when(service).update(Mockito.anyLong(), Mockito.any(Hospital.class));
+        getDoAnswerToFindById().when(service).findBy(Mockito.anyLong());
+        getDoAnswerToPacienteFindById().when(pacienteService).findById(Mockito.anyLong());
+        getDoAnswerToInternacaoSave().when(internacaoService).save(Mockito.any(Internacao.class));
+        getDoAnswerToInternacaoCheckout().when(internacaoService).checkout(Mockito.anyLong(), Mockito.anyLong());
+        getDoAnswerToInternacaoById().when(internacaoService).findById(Mockito.anyLong());
     }
 
     @Test
     public void shouldSaveHospital() throws Exception {
-        Hospital hospital = this.buildValidHospital();
-        this.mockMvc.perform(post("/hospitais")
+        Hospital hospital = buildValidHospital();
+        mockMvc.perform(post("/hospitais")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(this.objectMapper.writeValueAsString(hospital)))
+                .content(objectMapper.writeValueAsString(hospital)))
                 .andDo(print())
                 .andExpect(status().isCreated());
     }
 
     @Test
     public void shouldNotSaveInvalidHospital() throws Exception {
-        Hospital hospital = this.buildValidHospital();
+        Hospital hospital = buildValidHospital();
         hospital.setNome(null);
         hospital.setEndereco(null);
-        this.mockMvc.perform(post("/hospitais")
+        mockMvc.perform(post("/hospitais")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(this.objectMapper.writeValueAsString(hospital)))
+                .content(objectMapper.writeValueAsString(hospital)))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
 
     @Test
     public void shouldReturnAllHospital() throws Exception {
-        this.mockMvc.perform(get("/hospitais"))
+        mockMvc.perform(get("/hospitais"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
 
     @Test
     public void shouldTrowsHospitalNotFoundExceptionWhenUpdateAndNotExists() throws Exception {
-        Hospital hospital = this.buildValidHospital();
-        this.mockMvc.perform(put("/hospitais/30000")
+        Hospital hospital = buildValidHospital();
+        mockMvc.perform(put("/hospitais/30000")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(this.objectMapper.writeValueAsString(hospital)))
+                .content(objectMapper.writeValueAsString(hospital)))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
 
     @Test
     public void shouldNotReturnHospitalWithInnexistentId() throws Exception {
-        this.mockMvc.perform(get("/hospitais/30000"))
+        mockMvc.perform(get("/hospitais/30000"))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
 
     @Test
     public void shouldCheckinPaciente() throws Exception {
-        Hospital hospital = this.buildValidHospital();
+        Hospital hospital = buildValidHospital();
         service.save(hospital);
 
-        this.mockMvc.perform(post("/hospitais/1/pacientes/1/checkin"))
+        mockMvc.perform(post("/hospitais/1/pacientes/1/checkin"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
 
     private void checkinPacienteId1() {
-        Hospital hospital = this.buildValidHospital();
-        Paciente paciente = this.buildValidPaciente();
+        Hospital hospital = buildValidHospital();
+        Paciente paciente = buildValidPaciente();
         Internacao internacao = new Internacao();
         hospital = service.save(hospital);
         paciente.setId(1L);
@@ -248,35 +280,58 @@ public class HospitalControllerTest {
         internacao.setHospital(hospital);
         internacao.setDataEntrada(LocalDateTime.now());
         internacao.setId(1L);
-        this.fakeInternacaoRepository.put(1L, internacao);
+        fakeInternacaoRepository.put(1L, internacao);
     }
 
     @Test
     public void shouldNotCheckinPacienteInternado() throws Exception {
-        this.checkinPacienteId1();
-        this.mockMvc.perform(post("/hospitais/1/pacientes/1/checkin"))
+        checkinPacienteId1();
+        mockMvc.perform(post("/hospitais/1/pacientes/1/checkin"))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
 
     @Test
     public void shouldCheckoutPacienteInternado() throws Exception {
-        this.checkinPacienteId1();
-        this.mockMvc.perform(put("/hospitais/1/pacientes/1/checkout"))
+        checkinPacienteId1();
+        mockMvc.perform(put("/hospitais/1/pacientes/1/checkout"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
 
     @Test
     public void shouldNotCheckoutPacienteNaoInternado() throws Exception {
-        this.checkinPacienteId1();
-        this.mockMvc.perform(put("/hospitais/1/pacientes/1/checkout"))
+        checkinPacienteId1();
+        mockMvc.perform(put("/hospitais/1/pacientes/1/checkout"))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(put("/hospitais/1/pacientes/1/checkout"))
+        mockMvc.perform(put("/hospitais/1/pacientes/1/checkout"))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    @Ignore
+    public void shouldAddTratamentos() throws Exception {
+        checkinPacienteId1();
+        Tratamento tratamentoA = new Tratamento();
+        tratamentoA.setData(LocalDateTime.now());
+        tratamentoA.setInternacao(fakeInternacaoRepository.get(1L));
+
+        Tratamento tratamentoB = new Tratamento();
+        tratamentoA.setData(LocalDateTime.now());
+        tratamentoA.setInternacao(fakeInternacaoRepository.get(1L));
+
+        List<Tratamento> tratamentos = new ArrayList<>();
+        tratamentos.add(tratamentoA);
+        tratamentos.add(tratamentoB);
+
+        mockMvc.perform(post("/hospitais/internacoes/1/tratamentos")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(tratamentos)))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 
     private Hospital buildValidHospital() {
