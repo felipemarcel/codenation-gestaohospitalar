@@ -15,7 +15,7 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long> {
      * @param nome Pesquisa parcial do nome do Produto
      * @return Lista todos os produtos relacionados
      */
-    @Query("select * from Produto where nome like concat(?1, '%')")
+    @Query("from Produto where nome like concat(?1, '%')")
     List<Produto> pesquisarProdutos (String nome);
 
 }
