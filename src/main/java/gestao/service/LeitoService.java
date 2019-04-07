@@ -33,5 +33,10 @@ public class LeitoService {
         return optionalLeito.get();
     }
 
+    public void update(Long id, Leito leito) {
+        Leito saved = this.findBy(id);
+        saved.setTipoLeito(leito.getTipoLeito());
+        this.save(saved);
+    }
 
 }
