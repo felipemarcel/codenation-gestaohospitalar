@@ -1,6 +1,5 @@
 package gestao.api;
 
-import gestao.exception.CheckoutNotValidException;
 import gestao.model.Hospital;
 import gestao.model.Internacao;
 import gestao.model.Paciente;
@@ -9,6 +8,7 @@ import gestao.service.HospitalService;
 import gestao.service.InternacaoService;
 import gestao.service.PacienteService;
 import gestao.service.TratamentoService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -53,7 +53,7 @@ public class HospitalController {
 
     @ResponseBody
     @GetMapping("/{id}")
-    public ResponseEntity<Hospital> findById(@PathVariable("id") Long id){
+    public ResponseEntity<Hospital> findById(@PathVariable("id") Long id) {
         return ok(service.findBy(id));
     }
 
@@ -66,7 +66,7 @@ public class HospitalController {
 
     @ResponseBody
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable("id") Long id, @Valid @RequestBody Hospital hospital){
+    public ResponseEntity<?> update(@PathVariable("id") Long id, @Valid @RequestBody Hospital hospital) {
         service.update(id, hospital);
         return ok().build();
     }
@@ -82,19 +82,6 @@ public class HospitalController {
     }
 
     @ResponseBody
-    @PostMapping("/{id}/pacientes/{paciente}/checkin")
-    public ResponseEntity<?> checkin(@PathVariable("id") Long id, @PathVariable("paciente") Long idPaciente) {
-        Paciente paciente = this.pacienteService.findById(idPaciente);
-        Hospital hospital = this.service.findBy(id);
-        Internacao internacao = new Internacao();
-        internacao.setHospital(hospital);
-        internacao.setPaciente(paciente);
-        internacao.setDataEntrada(LocalDateTime.now());
-        internacao = this.internacaoService.save(internacao);
-        return ok(internacao);
-    }
-
-    @ResponseBody
     @PutMapping("/{id}/pacientes/{paciente}/checkout")
     public ResponseEntity<?> checkout(@PathVariable("id") Long id, @PathVariable("paciente") Long idPaciente) {
         this.internacaoService.checkout(idPaciente, id);
@@ -105,7 +92,7 @@ public class HospitalController {
     @PostMapping("/internacoes/{id}/tratamentos")
     public ResponseEntity<?> addTratamento(@PathVariable("id") Long id, @RequestBody List<@Valid Tratamento> tratamentos) {
         Internacao internacao = this.internacaoService.findById(id);
-        for (Tratamento tratamento: tratamentos) {
+        for (Tratamento tratamento : tratamentos) {
             tratamento.setInternacao(internacao);
             tratamento = this.tratamentoService.save(tratamento);
         }
@@ -119,4 +106,25 @@ public class HospitalController {
         return ok(this.tratamentoService.listTratamentosPacientesInternados(internacao, paciente, id));
     }
 
+    @GetMapping("/{id}/estoque")
+    public ResponseEntity<?> listEstoque(@PathVariable("id") Long id) {
+        return ok(service.getEstoqueBy(id));
+    }
+
+    @GetMapping("/{id}/estoque/{produto}")
+    public ResponseEntity<?> findProdutoFromEstoque(@PathVariable("id") Long id, @PathVariable("produto") Long idProduto) {
+        return ok(service.getProdutoFromEstoque(id, idProduto));
+    }
+
+    @PostMapping("/{id}/pacientes/{paciente}/checkin")
+    public ResponseEntity<?> checkin(@PathVariable("id") Long id, @PathVariable("paciente") Long idPaciente) {
+        Paciente paciente = pacienteService.findById(idPaciente);
+        Hospital hospital = service.findBy(id);
+        Internacao internacao = new Internacao();
+        internacao.setHospital(hospital);
+        internacao.setPaciente(paciente);
+        internacao.setDataEntrada(LocalDateTime.now());
+        internacaoService.save(internacao);
+        return ok().build();
+    }
 }

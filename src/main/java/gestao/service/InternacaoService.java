@@ -46,5 +46,4 @@ public class InternacaoService {
         return this.repository.findOpenedInternacaoByPaciente(idPaciente);
     }
 
-
 }
