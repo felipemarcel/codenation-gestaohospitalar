@@ -1,17 +1,15 @@
 package gestao.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import gestao.exception.HospitalNotFoundException;
 import gestao.exception.PacienteNotFoundException;
-import gestao.model.Hospital;
 import gestao.model.Paciente;
 import gestao.model.Sexo;
 import gestao.service.PacienteService;
+import gestao.service.TratamentoService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.Stubber;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -46,6 +44,9 @@ public class PacienteControllerTest {
 
     @MockBean
     private PacienteService service;
+
+    @MockBean
+    private TratamentoService tratamentoService;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -135,7 +136,7 @@ public class PacienteControllerTest {
     }
 
     @Test
-    public void shouldReturnAllPaciente() throws Exception{
+    public void shouldReturnAllPaciente() throws Exception {
         this.mockMvc.perform(get("/pacientes"))
                 .andDo(print())
                 .andExpect(status().isOk());
