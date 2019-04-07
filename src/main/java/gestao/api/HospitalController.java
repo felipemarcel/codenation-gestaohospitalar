@@ -3,12 +3,17 @@ package gestao.api;
 import gestao.exception.CheckoutNotValidException;
 import gestao.model.Hospital;
 import gestao.model.Internacao;
+import gestao.model.Leito;
 import gestao.model.Paciente;
 import gestao.service.HospitalService;
 import gestao.service.InternacaoService;
+import gestao.service.LeitoService;
 import gestao.service.PacienteService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -22,6 +27,7 @@ import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping("/hospitais")
+@Api(value = "Hospital")
 public class HospitalController {
 
     @Autowired
@@ -32,6 +38,9 @@ public class HospitalController {
 
     @Autowired
     private PacienteService pacienteService;
+
+    @Autowired
+    private LeitoService leitoService;
 
     @ResponseBody
     @GetMapping
@@ -108,5 +117,28 @@ public class HospitalController {
         return ok().build();
     }
 
+    /**
+     * Return a integer that represents the number of empty beds by hospital
+     * @param id
+     */
+    @ResponseBody
+    @GetMapping(value = "/{id}/leitos-livres", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<?> howManyBedsAreFree(@PathVariable("id") Long id) {
+        return ok(this.leitoService.howManyBedsAreFree(id));
+    }
+
+    /**
+     * Save a instance of Leito in database
+     * btw: by default the leito's status is free
+     * @param id
+     * @param leito
+     * @return
+     */
+    @ResponseBody
+    @PostMapping(value = "/{id}/leitos", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<?> save(@PathVariable("id") Long id, @Valid @RequestBody Leito leito) {
+        Leito saved = this.leitoService.save(id, leito.getTipoLeito());
+        return ok(saved);
+    }
 
 }
