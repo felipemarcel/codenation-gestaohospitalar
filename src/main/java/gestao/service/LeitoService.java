@@ -1,4 +1,4 @@
-package gestao.serviceTest;
+package gestao.service;
 
 public class LeitoService {
 }
