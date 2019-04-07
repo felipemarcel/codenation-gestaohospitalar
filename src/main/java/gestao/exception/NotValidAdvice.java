@@ -5,22 +5,23 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @ControllerAdvice
-public class NotFoundAdvice {
+public class NotValidAdvice {
 
     @ResponseBody
-    @ResponseStatus(NOT_FOUND)
-    @ExceptionHandler(HospitalNotFoundException.class)
-    String hospitalNotFoundHandler(HospitalNotFoundException ex){
+    @ResponseStatus(BAD_REQUEST)
+    @ExceptionHandler(CheckinNotValidException.class)
+    String checkinNotValidHandler(CheckinNotValidException ex){
         return ex.getMessage();
     }
 
     @ResponseBody
-    @ResponseStatus(NOT_FOUND)
-    @ExceptionHandler(PacienteNotFoundException.class)
-    String pacienteNotFoundHandler(PacienteNotFoundException ex){
+    @ResponseStatus(BAD_REQUEST)
+    @ExceptionHandler(CheckoutNotValidException.class)
+    String checkoutNotValidHandler(CheckoutNotValidException ex){
         return ex.getMessage();
     }
 }
