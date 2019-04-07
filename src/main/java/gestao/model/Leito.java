@@ -22,6 +22,14 @@ public class Leito {
     @JoinColumn(name = "hospital_id")
     private Hospital hospital;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public TipoLeito getTipoLeito() {
         return tipoLeito;
     }

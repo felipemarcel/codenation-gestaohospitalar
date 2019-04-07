@@ -36,4 +36,12 @@ public class LeitoController {
         return ResponseEntity.ok(this.service.findBy(id));
     }
 
+    @ResponseBody
+    @PutMapping("/{id}")
+    public ResponseEntity<Leito> update(@PathVariable("id") Long id, @Valid @RequestBody Leito leito) {
+        this.service.update(id, leito);
+        return ResponseEntity.ok().build();
+    }
+
+
 }
