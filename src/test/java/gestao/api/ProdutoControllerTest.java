@@ -1,6 +1,6 @@
-package gestao.apiTest;
+package gestao.api;
 
-import gestao.serviceTest.PacienteService;
+import gestao.service.ProdutoService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,19 +12,18 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(PacienteController.class)
-public class PacienteControllerTest {
+@WebMvcTest(ProdutoController.class)
+public class ProdutoControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private PacienteService service;
+    private ProdutoService service;
 
     @Test
     public void contextLoads() {
         assertThat(service).isNotNull();
         assertThat(mockMvc).isNotNull();
     }
-
 }
