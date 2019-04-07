@@ -1,5 +1,7 @@
 package gestao.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
@@ -13,6 +15,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 
 @Entity
 @Table(name = "internacoes")
+@JsonIgnoreProperties(value = {"hospital"}, allowGetters = true)
 public class Internacao {
 
     @Id

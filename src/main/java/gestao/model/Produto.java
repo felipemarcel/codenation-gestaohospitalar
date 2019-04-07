@@ -1,23 +1,33 @@
 package gestao.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.GenerationType.SEQUENCE;
 
 @Entity
 @Table(name = "produtos")
+@JsonIgnoreProperties(ignoreUnknown = true, value = {"hibernateLazyInitializer", "handler"})
 public class Produto {
 
     @Id
+    @GeneratedValue(strategy = SEQUENCE)
     private Long id;
 
     private String nome;
 
     private String descricao;
 
-    @OneToMany(mappedBy = "produto", cascade = ALL, orphanRemoval = true)
-    private List<Estoque> estoque;
+    @OneToMany(mappedBy = "produto", cascade = ALL)
+    @JsonBackReference
+    private Set<Estoque> estoques;
 
     @OneToMany(mappedBy = "produto", cascade = ALL, orphanRemoval = true)
     private List<Tratamento> tratamento;
@@ -38,11 +48,4 @@ public class Produto {
         this.descricao = descricao;
     }
 
-    public List<Estoque> getEstoque() {
-        return estoque;
-    }
-
-    public void setEstoque(List<Estoque> estoque) {
-        this.estoque = estoque;
-    }
 }

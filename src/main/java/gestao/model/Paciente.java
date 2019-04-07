@@ -1,5 +1,6 @@
 package gestao.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.validator.constraints.Range;
 import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -16,6 +17,7 @@ import static javax.persistence.CascadeType.ALL;
 
 @Entity
 @Table(name = "pacientes")
+@JsonIgnoreProperties(value = {"internacao"}, allowGetters = true)
 public class Paciente {
 
     @Id
