@@ -5,6 +5,7 @@ import gestao.model.Estoque;
 import gestao.model.Hospital;
 import gestao.model.Produto;
 import gestao.repository.HospitalRepository;
+import gestao.repository.LeitoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -66,4 +67,5 @@ public class HospitalService {
         repository.findById(idHospital).orElseThrow(() -> new HospitalNotFoundException(idHospital)).getEstoques().stream();
         return null;
     }
+
 }

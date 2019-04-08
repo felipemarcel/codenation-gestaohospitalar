@@ -9,6 +9,7 @@ import gestao.service.HospitalService;
 import gestao.service.InternacaoService;
 import gestao.service.PacienteService;
 import gestao.service.TratamentoService;
+import gestao.service.LeitoService;
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -56,6 +57,9 @@ public class HospitalControllerTest {
 
     @MockBean
     private TratamentoService tratamentoService;
+    
+    @MockBean
+    private LeitoService leitoService;
 
     @Autowired
     private ObjectMapper objectMapper;
