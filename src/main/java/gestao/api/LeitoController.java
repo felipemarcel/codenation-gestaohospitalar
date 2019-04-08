@@ -21,6 +21,7 @@ public class LeitoController {
     @ResponseBody
     @PostMapping
     public ResponseEntity<?> save(@Valid @RequestBody Leito leito) throws URISyntaxException {
+
         return ResponseEntity.created(new URI(this.service.save(leito).getId().toString())).build();
     }
 
