@@ -23,4 +23,11 @@ public class NotFoundAdvice {
     String pacienteNotFoundHandler(PacienteNotFoundException ex){
         return ex.getMessage();
     }
+
+    @ResponseBody
+    @ResponseStatus(NOT_FOUND)
+    @ExceptionHandler(TratamentoNotFoundException.class)
+    String tratamentoNotFoundHandler(TratamentoNotFoundException ex){
+        return ex.getMessage();
+    }
 }

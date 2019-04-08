@@ -42,4 +42,12 @@ public class PacienteService {
         saved.setLongitude(paciente.getLongitude());
         this.save(saved);
     }
+
+    public List<Paciente> listPacientesInternadosSemAlta(Long idHospital){
+        return this.repository.listPacientesInternadosSemAlta(idHospital);
+    }
+
+    public List<Paciente> listPacientesInternados(Long idHospital){
+        return this.repository.listPacientesInternados(idHospital);
+    }
 }
