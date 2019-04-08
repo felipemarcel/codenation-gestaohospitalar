@@ -2,6 +2,7 @@ package gestao.api;
 
 import gestao.model.Produto;
 import gestao.service.ProdutoService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping("/produtos")
+@Api(value = "Produto")
 public class ProdutoController {
 
     @Autowired
