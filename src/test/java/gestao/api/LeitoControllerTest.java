@@ -43,9 +43,6 @@ public class LeitoControllerTest {
     @MockBean
     private LeitoService service;
 
-    @MockBean
-    private LeitoService leitoService;
-
     @Autowired
     private ObjectMapper objectMapper;
 
