@@ -1,4 +1,4 @@
-package gestao.configuration;
+package src.main.java.gestao.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,7 +30,7 @@ public class SwaggerConfiguration extends WebMvcConfigurationSupport {
                 .title("Hospital")
                 .description("API Hospital")
                 .version("1.0.0")
-                .license("Nenhuma ainda")
+                .license("MIT License")
                 .licenseUrl("")
                 .build();
     }
