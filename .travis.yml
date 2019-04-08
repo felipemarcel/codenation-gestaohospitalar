@@ -4,6 +4,7 @@ sudo: false # faster builds
 
 install: true
 script: mvn install -Dmaven.javadoc.skip=true -B -V
+script: mvn cobertura:cobertura
 
 cache:
   directories:
