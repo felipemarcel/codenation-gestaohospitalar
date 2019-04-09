@@ -4,7 +4,9 @@ import com.google.maps.DistanceMatrixApi;
 import com.google.maps.DistanceMatrixApiRequest;
 import com.google.maps.GeoApiContext;
 import com.google.maps.errors.ApiException;
+import com.google.maps.model.Distance;
 import com.google.maps.model.DistanceMatrix;
+import com.google.maps.model.DistanceMatrixRow;
 import com.google.maps.model.LatLng;
 import gestao.exception.PacienteNotFoundException;
 import gestao.model.Hospital;
@@ -17,6 +19,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.google.maps.DistanceMatrixApi.getDistanceMatrix;
 import static com.google.maps.DistanceMatrixApi.newRequest;
@@ -74,13 +78,15 @@ public class PacienteService {
     public Hospital listAllNeraby(Long id) {
         Paciente paciente = findById(id);
         List<Hospital> hospitais = hospitalService.listAll();
-
-        DistanceMatrix distanceMatrixApi = null;
-        try {
-            distanceMatrixApi = newRequest(context)
-                    .origins(new LatLng(paciente.getLatitude().doubleValue(), paciente.getLongitude().doubleValue()))
-                    .destinations(coordinates.toArray(new LatLng[coordinates.size()]))
-                    .await();
+        Hospital nearbyHospital = null;
+        
+        try {;
+        	List<Distance> distances = Stream.of(getDistanceMatrixApi(paciente, hospitais).rows)
+        			.flatMap(row -> Stream.of(row.elements).map(element -> element.distance))
+        			.collect(Collectors.toList());
+        	for(int i = 0; i < hospitais.size(); i++) {
+        		
+        	}
         } catch (ApiException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
