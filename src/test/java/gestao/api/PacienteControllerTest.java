@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import gestao.exception.PacienteNotFoundException;
 import gestao.model.Paciente;
 import gestao.model.Sexo;
+import gestao.service.HospitalService;
+import gestao.service.LeitoService;
 import gestao.service.PacienteService;
 import gestao.service.TratamentoService;
 import org.junit.Before;
@@ -47,6 +49,12 @@ public class PacienteControllerTest {
 
     @MockBean
     private TratamentoService tratamentoService;
+    
+    @MockBean
+    private LeitoService leitoService;
+    
+    @MockBean
+    private HospitalService hospitalService;
 
     @Autowired
     private ObjectMapper objectMapper;

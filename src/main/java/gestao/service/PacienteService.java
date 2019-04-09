@@ -1,12 +1,9 @@
 package gestao.service;
 
-import com.google.maps.DistanceMatrixApi;
-import com.google.maps.DistanceMatrixApiRequest;
 import com.google.maps.GeoApiContext;
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.Distance;
 import com.google.maps.model.DistanceMatrix;
-import com.google.maps.model.DistanceMatrixRow;
 import com.google.maps.model.LatLng;
 import gestao.exception.PacienteNotFoundException;
 import gestao.model.Hospital;
@@ -16,13 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.google.maps.DistanceMatrixApi.getDistanceMatrix;
 import static com.google.maps.DistanceMatrixApi.newRequest;
 import static java.util.stream.Collectors.toList;
 
@@ -34,7 +29,10 @@ public class PacienteService {
 
     @Autowired
     private HospitalService hospitalService;
-
+    
+    @Autowired
+    private LeitoService leitoService;
+    
     GeoApiContext context = new GeoApiContext.Builder()
             .apiKey("AIzaSyCBhDVDAgb81AG7HMiIajkSywvDkQ_M5rE")
             .build();
@@ -75,18 +73,16 @@ public class PacienteService {
         return this.repository.listPacientesInternados(idHospital);
     }
 
-    public Hospital listAllNeraby(Long id) {
+    public Hospital findNearby(Long id) {
+    	Hospital nearbyHospital = null;
         Paciente paciente = findById(id);
         List<Hospital> hospitais = hospitalService.listAll();
-        Hospital nearbyHospital = null;
-        
-        try {;
+        try {
         	List<Distance> distances = Stream.of(getDistanceMatrixApi(paciente, hospitais).rows)
         			.flatMap(row -> Stream.of(row.elements).map(element -> element.distance))
         			.collect(Collectors.toList());
-        	for(int i = 0; i < hospitais.size(); i++) {
-        		
-        	}
+        	
+        	nearbyHospital = getNearby(distances, hospitais);
         } catch (ApiException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -94,10 +90,22 @@ public class PacienteService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
+        
+        return nearbyHospital;
+    }
+    
+    protected Hospital getNearby(List<Distance> distances, List<Hospital> hospitais) {
+    	Long max = 0L;
+    	Hospital nearbyHospital = null;
+    	for(int i = 0; i < hospitais.size(); i++) {
+    		if(max < distances.get(i).inMeters && leitoService.howManyBedsAreFree(hospitais.get(i).getId()) > 0) {
+    			nearbyHospital = hospitais.get(i);
+    		}    		
+    	}
+    	return nearbyHospital;
     }
 
-    public DistanceMatrix getDistanceMatrixApi(Paciente paciente, List<Hospital> hospitais) throws InterruptedException, ApiException, IOException {
+    protected DistanceMatrix getDistanceMatrixApi(Paciente paciente, List<Hospital> hospitais) throws InterruptedException, ApiException, IOException {
         List<LatLng> coordinates = hospitais.stream()
                 .map(hospital -> new LatLng(hospital.getLatitude().doubleValue(), hospital.getLongitude().doubleValue()))
                 .collect(toList());
