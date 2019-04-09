@@ -1,7 +1,5 @@
 package gestao.service;
 
-import gestao.exception.PacienteNotFoundException;
-import gestao.model.Hospital;
 import gestao.model.Paciente;
 import gestao.model.Sexo;
 import gestao.repository.PacienteRepository;
@@ -17,8 +15,6 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -42,6 +38,12 @@ public class PacienteServiceTest {
 
     @MockBean
     private PacienteRepository repository;
+    
+    @MockBean
+    private LeitoService leitoService;
+    
+    @MockBean
+    private HospitalService hospitalService;
 
     private Validator validator;
     private Map<Long, Paciente> fakeRepository = new HashMap<>();
