@@ -17,4 +17,11 @@ public class EstoqueNotFoundAdvice {
         return ex.getMessage();
     }
 
+    @ResponseBody
+    @ResponseStatus(NOT_FOUND)
+    @ExceptionHandler(EstoqueNotEnoughException.class)
+    String estoqueNotEnoughExceptionHandler(EstoqueNotEnoughException ex) {
+        return ex.getMessage();
+    }
+
 }

@@ -59,6 +59,8 @@ public class Produto {
     @OneToMany(mappedBy = "produto", cascade = ALL, orphanRemoval = true)
     private List<Tratamento> tratamento;
 
+    public Produto() {}
+
     public String getNome() {
         return nome;
     }

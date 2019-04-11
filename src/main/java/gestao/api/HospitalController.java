@@ -117,6 +117,18 @@ public class HospitalController {
         return ok(service.getProdutoFromEstoque(id, idProduto));
     }
 
+    @PutMapping("/{id}/estoque/{idProduto}/{quantidade}")
+    public ResponseEntity<?> removeProdutoNoEstoque(@PathVariable("id") Long id, @PathVariable("idProduto") Long idProduto, @PathVariable("quantidade") int quantidade) {
+        this.service.removeProdutoNoEstoque(id, idProduto, quantidade, false);
+        return ok().build();
+    }
+
+    @PostMapping("/{id}/estoque/{idProduto}/{quantidade}")
+    public ResponseEntity<?> addProdutoNoEstoque(@PathVariable("id") Long id, @PathVariable("idProduto") Long idProduto, @PathVariable("quantidade") int quantidade) {
+        this.service.addProdutoNoEstoque(id, idProduto, quantidade);
+        return ok().build();
+    }
+
     @PostMapping("/{id}/pacientes/{paciente}/checkin")
     public ResponseEntity<?> checkin(@PathVariable("id") Long id, @PathVariable("paciente") Long idPaciente) {
         Paciente paciente = pacienteService.findById(idPaciente);

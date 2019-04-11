@@ -24,6 +24,11 @@ public class Estoque {
     @JsonManagedReference
     private Produto produto;
 
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "hospital_id", referencedColumnName = "id")
+    @JsonManagedReference
+    private Hospital hospital;
+
     public Long getId() {
         return id;
     }
@@ -38,5 +43,21 @@ public class Estoque {
 
     public void setQuantidade(Integer quantidade) {
         this.quantidade = quantidade;
+    }
+
+    public Produto getProduto() {
+        return produto;
+    }
+
+    public void setProduto(Produto produto) {
+        this.produto = produto;
+    }
+
+    public Hospital getHospital() {
+        return hospital;
+    }
+
+    public void setHospital(Hospital hospital) {
+        this.hospital = hospital;
     }
 }
