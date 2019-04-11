@@ -15,7 +15,6 @@ public class Leito {
     @GeneratedValue(strategy = AUTO)
     private Long id;
 
-    @NotBlank(message = "{leito.tipo.not.blank}")
     @Enumerated(EnumType.STRING)
     private TipoLeito tipoLeito;
 

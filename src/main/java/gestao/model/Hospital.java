@@ -12,6 +12,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.SEQUENCE;
 
 @Entity
@@ -36,10 +37,6 @@ public class Hospital {
     @NotNull(message = "{hospital.longitude.not.blank}")
     @Range(min = -180, max = 180, message = "{hospital.longitude.invalid}")
     private BigDecimal longitude;
-
-    @OneToMany(cascade = ALL, orphanRemoval = true)
-    @JoinColumn(name = "hospital_id", referencedColumnName = "id")
-    private Set<Estoque> estoques;
 
     public Long getId() {
         return id;
@@ -79,14 +76,6 @@ public class Hospital {
 
     public void setLongitude(BigDecimal longitude) {
         this.longitude = longitude;
-    }
-
-    public Set<Estoque> getEstoques() {
-        return estoques;
-    }
-
-    public void setEstoques(Set<Estoque> estoques) {
-        this.estoques = estoques;
     }
 
     @Override
